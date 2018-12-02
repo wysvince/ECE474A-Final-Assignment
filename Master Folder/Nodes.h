@@ -30,12 +30,14 @@ public:
 	void setEdges(Edges newEdges);
 	void setNumCycles(int newNumCycles);
 	void setOperation(string op);
+	void setALAP(int time);
 
 	//getters
 	int getStateNum();
 	vector<Edges> getEdges();
 	int getNumCycles();
 	string getOperation();
+	int getALAP();
 
 	//Methods
 	void addEdge(Edges newEdge);

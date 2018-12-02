@@ -26,12 +26,12 @@ int main(int argc, char* argv[]) {
 
 	ifstream inputFilename;
 	ofstream outputFilename;
-
+	/*
 	// Class objects
 	Variables var;
 	Operations op;
 	//Statements state;
-	ReadInputFile read;
+	ReadInputFile read;*/
 	WriteOutputFile write;
 	
 	// Testing Graph Class ------------------------
@@ -52,6 +52,7 @@ int main(int argc, char* argv[]) {
 
 	// Get data from input file
 	if (inputFilename.is_open()) {
+		/* Not working for mine so commented for now.
 		cout << "Opened File for read" << endl;								// DEBUGGING (Remove this)
 		
 		// fetching variables from input file
@@ -63,14 +64,14 @@ int main(int argc, char* argv[]) {
 		cout << "Fetching operations" << endl;
 		read.fetchOperations(inputFilename, op);
 		cout << "Fetching operations completed" << endl;					// DEBUGGING (Remove this)
-
+		
 		// fetching statements from input file
 		//cout << "Fetching statements" << endl;
 		//read.fetchStatements(inputFilename, state);
 		//cout << "Fetching statements completed" << endl;					// DEBUGGING (Remove this)
 
 		read.handleOperations(inputFilename, &graph);
-
+		*/
 		// close input file
 		inputFilename.close();
 		cout << "File closed" << endl;										// DEBUGGING (Remove this)
@@ -82,6 +83,7 @@ int main(int argc, char* argv[]) {
 
 //////////// Generate graph ////////////////////////////////////////////////////////////////////////////////////////////////
 	// Testing Graph Class -------------------------------
+	cout << "Start Writing Graph" << endl;
 	for (int temp = 0; temp < 10; temp++) {
 		cond = cond.substr(0, 15);
 		cond = cond + to_string(tempWeight);
@@ -97,6 +99,10 @@ int main(int argc, char* argv[]) {
 		graph.setNodes(tempNode);
 		graph.setWeight(tempWeight);
 	}
+	cout << "Graph Written" << endl;
+	cout << "Start ALAP" << endl;
+	graph.createALAPSchedule(7);
+	cout << "End ALAP" << endl;
 	// ----------------------------------------------------
 	// Done: Generate graph
 
@@ -107,6 +113,7 @@ int main(int argc, char* argv[]) {
 //////////// Generate output file ////////////////////////////////////////////////////////////////////////////////////
 	outputFilename.open(argv[3]);
 	if (outputFilename.is_open()) {
+		/* Not working for mine so commented for now.
 		cout << "Opened file for write" << endl;							// DEBUGGING (Remove this)
 		// writing to output file
 		write.createHLSMHeader(outputFilename);
@@ -115,7 +122,12 @@ int main(int argc, char* argv[]) {
 		cout << "Wrote Datatype Instantiations" << endl;					// DEBUGGING (Remove this)
 		write.writeOperations(outputFilename, read);
 		cout << "Wrote Operations" << endl;									// DEBUGGING (Remove this)
-		//write.writeGraph(outputFilename, graph);
+		*/
+
+		// DEBUG ONLY ----------------------------------
+		cout << "\n\n\n";
+		write.writeGraph(outputFilename, graph);
+		// DEBUG ONLY ----------------------------------
 
 		// close output file
 		outputFilename.close();

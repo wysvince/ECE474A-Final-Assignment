@@ -29,6 +29,10 @@ void Nodes::setOperation(string op) {
 	this->operation = op;
 }
 
+void Nodes::setALAP(int time) {
+	this->alapTime = time;
+}
+
 // getters
 int Nodes::getStateNum() {
 	return this->stateNum;
@@ -44,6 +48,10 @@ int Nodes::getNumCycles() {
 
 string Nodes::getOperation() {
 	return this->operation;
+}
+
+int Nodes::getALAP() {
+	return this->alapTime;
 }
 
 //Methods
