@@ -56,6 +56,7 @@ public:
 	void createUnscheduledList();
 	void createALAPSchedule(int latency);
 	void addNode(Nodes newNode);
+	void Schedule();
 };
 
 #endif // !GRAPH_H
