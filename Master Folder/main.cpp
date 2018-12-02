@@ -97,6 +97,7 @@ int main(int argc, char* argv[]) {
 		graph.setNodes(tempNode);
 		graph.setWeight(tempWeight);
 	}
+	graph.createALAPSchedule(7);
 	// ----------------------------------------------------
 	// Done: Generate graph
 
@@ -115,7 +116,11 @@ int main(int argc, char* argv[]) {
 		cout << "Wrote Datatype Instantiations" << endl;					// DEBUGGING (Remove this)
 		write.writeOperations(outputFilename, read);
 		cout << "Wrote Operations" << endl;									// DEBUGGING (Remove this)
-		//write.writeGraph(outputFilename, graph);
+
+		// DEBUG ONLY ----------------------------------
+		cout << "\n\n\n";
+		write.writeGraph(outputFilename, graph);
+		// DEBUG ONLY ----------------------------------
 
 		// close output file
 		outputFilename.close();
