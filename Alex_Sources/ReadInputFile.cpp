@@ -481,7 +481,9 @@ void ReadInputFile::checkDuplicatedVariables(){
 		exit = 1;
 	}
 }
-
+	/*	Converts all operations into Node objects, then determines edges dependecies with
+		other Nodes, updates those Node edges, and finally adds the node to the graph with 
+		an ASAP schedule																	*/
 int ReadInputFile::handleOperations(ifstream &file, Graph* graph){ 
 	string inputLine;
 	string token, token2;
