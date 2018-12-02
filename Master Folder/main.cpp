@@ -95,7 +95,6 @@ int main(int argc, char* argv[]) {
 		tempNode.setOperation(operation);
 
 		tempWeight++;
-		graph.setEdges(tempEdge);
 		graph.setNodes(tempNode);
 		graph.setWeight(tempWeight);
 	}
