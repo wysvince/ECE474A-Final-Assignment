@@ -29,6 +29,16 @@ void Nodes::setOperation(string op) {
 	this->operation = op;
 }
 
+void Nodes::setSlack(int num)
+{
+	this->slack = num;
+}
+
+void Nodes::setCycleCount(int num)
+{
+	this->cycleCount += num;
+}
+
 void Nodes::setALAP(int time) {
 	this->alapTime = time;
 }
@@ -50,6 +60,16 @@ string Nodes::getOperation() {
 	return this->operation;
 }
 
+int Nodes::getSlack()
+{
+	return this->slack;
+}
+
+int Nodes::getCycleCount()
+{
+	return this->cycleCount;
+}
+
 int Nodes::getALAP() {
 	return this->alapTime;
 }
@@ -59,3 +79,13 @@ int Nodes::getALAP() {
 void Nodes::addEdge(Edges newEdge) {
 	edges.push_back(newEdge);
 }
+
+void Nodes::calculateSlack(int alapTime, int currCycle)
+{
+	slack = alapTime - currCycle;
+	if (slack < 0) {
+		slack = 0;
+	}
+}
+
+

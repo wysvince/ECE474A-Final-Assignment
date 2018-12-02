@@ -175,7 +175,7 @@ void WriteOutputFile::createHLSMHeader(ofstream & file)
 }
 
 void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
-	edges = graph.getEdges();
+	//edges = graph.getEdges();
 	nodes = graph.getNodes();
 	weight = graph.getWeight();
 	
