@@ -69,15 +69,53 @@ vector<int> Graph::getListRSchedule()
 
 //Methods
 
-void Graph::createUnscheduledList()
-{
+void Graph::createUnscheduledList(){
+	for (vector<Nodes>::size_type i = nodes.size(); i != 0; i++) {
+		nodes.at(i).setALAP(-1); // Set default ALAP 
+	}
 }
 
+/* ALAP Schedule:
+ *	Set up scheduling based on path and reset latency when path end is reached.
+ */
 void Graph::createALAPSchedule(int latency){
 	Nodes tempNode;
+	Nodes* tempPt;
+	int lat = latency;
+	int numSchedNode;
+	int size = nodes.size();
+	int index = 0;
+	int numCycles = 0;
+	bool foundNode = true;
+	int i = 0;
 
-	for (vector<Nodes>::size_type i = nodes.size(); i != 0;i++) {
+	tempPt = &nodes.back();
 
+	while (numSchedNode != size) {
+		// Find the next Node.
+		for (vector<Nodes>::size_type i = nodes.size(); i != 0; i++) {
+			if (&nodes.at(i) == tempPt) {
+				index = i;
+			}
+		}
+
+		// How we schedule.
+		numCycles = nodes.at(index).getNumCycles(); // Find number of cycles.
+		lat = lat - numCycles;						// Set latency based on node.
+		nodes.at(index).setALAP(lat);
+		numSchedNode++;
+
+		// Itterate through edges to find next node.
+		tempPt = nodes.at(index).getEdges().at(i).getPrevNode();
+
+		// Couldn't find a new node.
+		if (i == nodes.at(index).getEdges().size()) {
+			foundNode == false;
+		}
+
+		if (foundNode == false) {
+			lat = latency;
+		}
 	}
 }
 
