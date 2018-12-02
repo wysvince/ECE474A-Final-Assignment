@@ -13,6 +13,7 @@ public:
 	vector<Variables> outputList;
 	vector<Variables> registerList;
 	vector <Operations> operationList;
+	vector <Statements> statementList;			// Needed for the handleStatements function.
 
 	// constructor
 	ReadInputFile();
@@ -27,6 +28,7 @@ public:
     void checkDuplicatedVariables();
 	bool checksIfVariableInstantiated(string line);
 	int handleOperations(ifstream &file, Graph* graph);
+	int handleStatements(ifstream &file, Graph* graph);
 };
 
 #endif // !READINPUTFILE_H
