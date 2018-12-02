@@ -93,12 +93,16 @@ int main(int argc, char* argv[]) {
 		tempNode.setOperation(operation);
 
 		tempWeight++;
-		graph.setEdges(tempEdge);
 		graph.setNodes(tempNode);
 		graph.setWeight(tempWeight);
 	}
 	// ----------------------------------------------------
 	// Done: Generate graph
+	// Generate ALAP Schedule
+	int latency = std::stoi(argv[2]);
+	graph.createALAPSchedule(latency);
+	// Generate List_R Schedule
+	graph.createListRSchedule(latency);
 
 //////////// Generate states //////////////////////////////////////////////////////////////////////////////////////////
 

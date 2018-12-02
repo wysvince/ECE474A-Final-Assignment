@@ -29,6 +29,16 @@ void Nodes::setOperation(string op) {
 	this->operation = op;
 }
 
+void Nodes::setSlack(int num)
+{
+	this->slack = num;
+}
+
+void Nodes::setCycleCount(int num)
+{
+	this->cycleCount += num;
+}
+
 // getters
 int Nodes::getStateNum() {
 	return this->stateNum;
@@ -46,8 +56,28 @@ string Nodes::getOperation() {
 	return this->operation;
 }
 
+int Nodes::getSlack()
+{
+	return this->slack;
+}
+
+int Nodes::getCycleCount()
+{
+	return this->cycleCount;
+}
+
 //Methods
 
 void Nodes::addEdge(Edges newEdge) {
 	edges.push_back(newEdge);
 }
+
+void Nodes::calculateSlack(int alapTime, int currCycle)
+{
+	slack = alapTime - currCycle;
+	if (slack < 0) {
+		slack = 0;
+	}
+}
+
+

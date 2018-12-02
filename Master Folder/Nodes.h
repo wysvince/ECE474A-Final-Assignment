@@ -18,7 +18,11 @@ private:
 	vector<Edges> edges;
 	int numCycles;
 	string operation;
+	int asapTime;
 	int alapTime;
+	int listRTime;
+	int slack;
+	int cycleCount;
 
 public:
 	// constructor
@@ -30,15 +34,20 @@ public:
 	void setEdges(Edges newEdges);
 	void setNumCycles(int newNumCycles);
 	void setOperation(string op);
+	void setSlack(int num);
+	void setCycleCount(int num);
 
 	//getters
 	int getStateNum();
 	vector<Edges> getEdges();
 	int getNumCycles();
 	string getOperation();
+	int getSlack();
+	int getCycleCount();
 
 	//Methods
 	void addEdge(Edges newEdge);
+	void calculateSlack(int alapTime, int currCycle);
 
 };
 
