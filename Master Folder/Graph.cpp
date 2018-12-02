@@ -83,7 +83,7 @@ void Graph::createALAPSchedule(int latency){
 	Nodes* tempPt;						// Saves the pointer to the next node.
 
 	int lat = latency;					// Saves the current latency. (set to max latency at start)
-	int numSchedNode;					// Total scheduled nodes (end condition for loop).
+	int numSchedNode = 0;					// Total scheduled nodes (end condition for loop).
 	int size = nodes.size();			// Size of the nodes vector
 	int index = 0;						// Index of current node in nodes vector.
 	int numCycles = 0;					// Number of cycles current node uses.
@@ -91,13 +91,13 @@ void Graph::createALAPSchedule(int latency){
 	bool foundNode = true;				// If we found the next node in the current path.
 	int indEdge = 0;					// Index of the current edge.
 
-	tempPt = &nodes.back();
+	tempPt = &(nodes.back());
 	startPath = nodes.size();
 
 	while (numSchedNode != size) {
 		// Find the next Node.
 		for (vector<Nodes>::size_type i = nodes.size(); i != 0; i++) {
-			if (&nodes.at(i) == tempPt) {
+			if (nodes.at(i).getOperation().compare((*tempPt).getOperation()) == 0) {
 				if (foundNode == false) {
 					startPath = i;
 				}
