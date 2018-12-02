@@ -73,8 +73,12 @@ void Graph::createUnscheduledList()
 {
 }
 
-void Graph::createALAPSchedule()
-{
+void Graph::createALAPSchedule(int latency){
+	Nodes tempNode;
+
+	for (vector<Nodes>::size_type i = nodes.size(); i != 0;i++) {
+
+	}
 }
 
 void Graph::createListRSchedule()

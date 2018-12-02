@@ -28,7 +28,6 @@ public:
     void checkDuplicatedVariables();
 	bool checksIfVariableInstantiated(string line);
 	int handleOperations(ifstream &file, Graph* graph);
-	int handleStatements(ifstream &file, Graph* graph);
 };
 
 #endif // !READINPUTFILE_H

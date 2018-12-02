@@ -22,11 +22,15 @@ Statements::Statements(string cond, string type) {
 }
 
 
+void Statements::setCondition(string cond) {
+	this->cond = cond;
+}
+
 void Statements::setOperation(Operations op) {
 	this->operations.push_back(op);
 }
 
-void Statements::setConState(Statements* conState) {
+void Statements::setConectState(Statements conState) {
 	this->conState = conState;
 }
 
@@ -34,10 +38,26 @@ void Statements::setNestState(Statements nestState) {
 	this->nestStates.push_back(nestState);
 }
 
-void Statements::setClose() {
-	this->isClosed = true;
+void Statements::setClose(bool closed) {
+	this->isClosed = closed;
 }
 
 void Statements::hasElse() {
 	this->hasElse = true;
+}
+
+string Statements::getCondition() {
+	return this->cond;
+}
+Statements* Statements::getConectState() {
+	return this->conState;
+}
+Statements Statements::getNestState(vector<Statements>::size_type index){
+	return this->nestStates.at(index);
+}
+bool Statements::getClose() {
+	return this->isClosed;
+}
+bool Statements::getElse() {
+	return this->hasElse;
 }

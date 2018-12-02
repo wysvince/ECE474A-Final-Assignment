@@ -50,7 +50,7 @@ public:
 	// void generateList_RSchedule(); // unsure where to plae this yet
 	//void calculateWeights(Operations &op);
 	void createUnscheduledList();
-	void createALAPSchedule();
+	void createALAPSchedule(int latency);
 	void createListRSchedule();
 
 	//methods

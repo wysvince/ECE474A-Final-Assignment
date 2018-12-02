@@ -29,14 +29,19 @@ public:
 	Statements(string cond, string type);
 	   
 	// Set Functions:
+	void setCondition(string cond);
 	void setOperation(Operations op);
-	void setConState(Statements* conState);
+	void setConectState(Statements* conState);
 	void setNestState(Statements nestState);
-	void setClose();
+	void setClose(bool closed);
 	void hasElse();
 
 	// Get Functions:
-
+	string getCondition();
+	Statements* getConectState();
+	Statements getNestState(vector<Statements>::size_type index);
+	bool getClose();
+	bool getElse();
 
 };
 #endif	// !STATEMENTS_H
