@@ -49,11 +49,12 @@ public:
 	// void generateALAPTimeTable(); // unsure where to place this yet
 	// void generateList_RSchedule(); // unsure where to plae this yet
 	//void calculateWeights(Operations &op);
-	void createALAPSchedule(int latency);
 	void createListRSchedule(int latency);
 	void updateU(Nodes node);
 	void updateS();
 	bool checkConstraint(Nodes node);
+	void createUnscheduledList();
+	void createALAPSchedule(int latency);
 	void addNode(Nodes newNode);
 };
 

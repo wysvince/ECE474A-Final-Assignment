@@ -39,6 +39,10 @@ void Nodes::setCycleCount(int num)
 	this->cycleCount += num;
 }
 
+void Nodes::setALAP(int time) {
+	this->alapTime = time;
+}
+
 // getters
 int Nodes::getStateNum() {
 	return this->stateNum;
@@ -64,6 +68,10 @@ int Nodes::getSlack()
 int Nodes::getCycleCount()
 {
 	return this->cycleCount;
+}
+
+int Nodes::getALAP() {
+	return this->alapTime;
 }
 
 //Methods

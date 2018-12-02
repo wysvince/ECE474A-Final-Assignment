@@ -36,6 +36,7 @@ public:
 	void setOperation(string op);
 	void setSlack(int num);
 	void setCycleCount(int num);
+	void setALAP(int time);
 
 	//getters
 	int getStateNum();
@@ -44,6 +45,7 @@ public:
 	string getOperation();
 	int getSlack();
 	int getCycleCount();
+	int getALAP();
 
 	//Methods
 	void addEdge(Edges newEdge);

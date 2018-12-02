@@ -184,6 +184,7 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	for (int temp = 0; temp < 10; temp++) {
 		file << "\tNode " << temp << ": " << nodes.at(temp).getOperation() << endl;
 		file << "\tEdge " << temp << ": " << edges.at(temp).getConditionalOperation() << endl;
+		file << "\tALAP " << temp << ": " << nodes.at(temp).getALAP() << endl;// Just for Debug.
 	}
 	file << "\n\n";
 	// ----------------------------------------------------
