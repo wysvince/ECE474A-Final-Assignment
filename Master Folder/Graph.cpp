@@ -146,7 +146,7 @@ void Graph::createUnscheduledList(){
 void Graph::createALAPSchedule(int latency){
 	Nodes tempNode;						// Temporary node to save nodes if needed.
 	Nodes* tempPt;						// Saves the pointer to the next node.
-  vector <Nodes> tempVector;			// Temporarily store a path to set values later.
+	vector <Nodes> tempVector;			// Temporarily store a path to set values later.
 
 	int lat = latency;					// Saves the current latency. (set to max latency at start)
   
@@ -157,10 +157,11 @@ void Graph::createALAPSchedule(int latency){
 	int startPath = 0;
 	bool foundNode = true;				// If we found the next node in the current path.
 	int indEdge = 0;					// Index of the current edge.
-  // test
-  string teststr1;
-  string teststr2;
-  int testint;
+
+	// test
+	string teststr1;
+	string teststr2;
+	int testint;
 
 	tempPt = &(nodes.back());
 	startPath = nodes.size();
