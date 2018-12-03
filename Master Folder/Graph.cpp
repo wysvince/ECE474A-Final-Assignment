@@ -102,12 +102,6 @@ void Graph::createALAPSchedule(int latency){
 	while (numSchedNode != size) {
 		// Find the next Node.
 		for (vector<Nodes>::size_type i = nodes.size() - 1; i != 0; i--) {
-			teststr1 = (*tempPt).getOperation();
-			teststr2 = nodes.at(i).getOperation();
-
-			testint = 1;
-
-			testint = teststr1.compare(teststr2);
 			if (nodes.at(i).getOperation().compare((*tempPt).getOperation()) == 0) {
 				if (foundNode == false) {
 					startPath = i;
