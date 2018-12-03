@@ -134,12 +134,22 @@ void Graph::createUnscheduledList(){
 
 /* ALAP Schedule:
  *	Set up scheduling based on path and reset latency when path end is reached.
+ *	New Plan:
+ *		- Use a searching algorithm (DFS) to find ordering of nodes, maybe by path.
+ *		- Start at bottom of a path and iterate through each node in each path setting
+ *		  the ALAP time as we go.
+ *		- We continue this until all nodes have a ALAP time so need a while loop that 
+ *		  keeps track of that.
+ *		- We are planning on changing the edges from pointers to nodes to the node index
+ *		  in it's nodes vector.
  */
 void Graph::createALAPSchedule(int latency){
 	Nodes tempNode;						// Temporary node to save nodes if needed.
 	Nodes* tempPt;						// Saves the pointer to the next node.
+  vector <Nodes> tempVector;			// Temporarily store a path to set values later.
 
 	int lat = latency;					// Saves the current latency. (set to max latency at start)
+  
 	int numSchedNode = 0;					// Total scheduled nodes (end condition for loop).
 	int size = nodes.size();			// Size of the nodes vector
 	int index = 0;						// Index of current node in nodes vector.
@@ -147,19 +157,23 @@ void Graph::createALAPSchedule(int latency){
 	int startPath = 0;
 	bool foundNode = true;				// If we found the next node in the current path.
 	int indEdge = 0;					// Index of the current edge.
+  // test
+  string teststr1;
+  string teststr2;
+  int testint;
 
 	tempPt = &(nodes.back());
 	startPath = nodes.size();
 
 	while (numSchedNode != size) {
-		// Find the next Node.
-		for (vector<Nodes>::size_type i = nodes.size(); i != 0; i++) {
-			if (nodes.at(i).getOperation().compare((*tempPt).getOperation()) == 0) {
-				if (foundNode == false) {
-					startPath = i;
-				}
-				index = i;
-			}
+			// Find the path.
+		  for (vector<Nodes>::size_type i = nodes.size() - 1; i != 0; i--) {
+        if (nodes.at(i).getOperation().compare((*tempPt).getOperation()) == 0) {
+          if (foundNode == false) {
+            startPath = i;
+          }
+          index = i;
+        }
 		}
 
 		// How we schedule.
