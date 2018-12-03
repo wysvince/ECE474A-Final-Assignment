@@ -18,43 +18,45 @@ class Graph {
 
 private:
 	vector<Nodes> nodes;
-	vector<Edges> edges;
+	//vector<Edges> edges;
 	int weight;
-	vector<int> unscheduledList;
 	vector<int> alapSchedule;
-	vector<int> listRSchedule;
+
+	// List R Scheduling:
+	vector<Nodes> listRSchedule;
+	vector<Nodes> U; // candidate operations (Node's index)
+	vector<Nodes> S; // scheduled nodes
 
 public:
 	// constructors
 	Graph();
-	Graph(Nodes newNodes, Edges newEdges, int newWeight);
+	//Graph(Nodes newNodes, Edges newEdges, int newWeight);
+	Graph(Nodes newNodes, int newWeight);
 
 	//setters
 	void setNodes(Nodes newNodes);
-	void setEdges(Edges newEdges);
 	void setWeight(int newWeight);
-	void setUnscheduledList(int num);
 	void setAlapSchedule(int num);
-	void setListRSchedule(int num);
+	void setListRSchedule(Nodes node);
 
 	//getters
 	vector<Nodes> getNodes();
-	vector<Edges> getEdges();
 	int getWeight();
-	vector<int> getUnscheduleList();
 	vector<int> getAlapSchedule();
-	vector<int> getListRSchedule();
+	vector<Nodes> getListRSchedule();
 
 	//methods
 	// void generateALAPTimeTable(); // unsure where to place this yet
 	// void generateList_RSchedule(); // unsure where to plae this yet
 	//void calculateWeights(Operations &op);
+	void createListRSchedule(int latency);
+	void updateU(Nodes node);
+	void updateS();
+	bool checkConstraint(Nodes node);
 	void createUnscheduledList();
 	void createALAPSchedule(int latency);
-	void createListRSchedule();
-
-	//methods
 	void addNode(Nodes newNode);
+	void Schedule();
 };
 
 #endif // !GRAPH_H
