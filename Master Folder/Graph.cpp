@@ -77,6 +77,14 @@ void Graph::createUnscheduledList(){
 
 /* ALAP Schedule:
  *	Set up scheduling based on path and reset latency when path end is reached.
+ *	New Plan:
+ *		- Use a searching algorithm (DFS) to find ordering of nodes, maybe by path.
+ *		- Start at bottom of a path and iterate through each node in each path setting
+ *		  the ALAP time as we go.
+ *		- We continue this until all nodes have a ALAP time so need a while loop that 
+ *		  keeps track of that.
+ *		- We are planning on changing the edges from pointers to nodes to the node index
+ *		  in it's nodes vector.
  */
 void Graph::createALAPSchedule(int latency){
 	Nodes tempNode;						// Temporary node to save nodes if needed.
