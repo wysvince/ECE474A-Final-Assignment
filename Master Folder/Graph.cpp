@@ -104,6 +104,7 @@ void Graph::updateS() {
 // Criteria: scheduled nodes needs to check the Node's cycle 
 bool Graph::checkConstraint(Nodes node) {
 	bool flag = false;
+	int index = 0;
 	// node is a mult operation type
 	// check if schedule list contains existing mult operation
 	if (node.getNumCycles() == 2) {
@@ -117,10 +118,11 @@ bool Graph::checkConstraint(Nodes node) {
 		// check for dependencies in scheduled nodes
 		for (Nodes s : S) {
 			for (Edges e : s.getEdges()) {
-				if (e.getNextNode() == &node) {
+				if (e.getNextNode() == index) { // Need to find index of node in nodes.
 					flag = true; // found dependency
 				}
 			}
+			index++;
 		}
 	}
 	return flag;
@@ -143,62 +145,75 @@ void Graph::createUnscheduledList(){
  *		- We are planning on changing the edges from pointers to nodes to the node index
  *		  in it's nodes vector.
  */
-void Graph::createALAPSchedule(int latency){
+void Graph::createALAPSchedule(int latency){  
+
+	// Graph variables.
+	Edges tempEdge;						// Temporary Edge.
 	Nodes tempNode;						// Temporary node to save nodes if needed.
-	Nodes* tempPt;						// Saves the pointer to the next node.
-  vector <Nodes> tempVector;			// Temporarily store a path to set values later.
-
-	int lat = latency;					// Saves the current latency. (set to max latency at start)
-  
-	int numSchedNode = 0;					// Total scheduled nodes (end condition for loop).
 	int size = nodes.size();			// Size of the nodes vector
-	int index = 0;						// Index of current node in nodes vector.
-	int numCycles = 0;					// Number of cycles current node uses.
-	int startPath = 0;
-	bool foundNode = true;				// If we found the next node in the current path.
-	int indEdge = 0;					// Index of the current edge.
-  // test
-  string teststr1;
-  string teststr2;
-  int testint;
 
-	tempPt = &(nodes.back());
-	startPath = nodes.size();
+	// Indicies variables.
+	vector <int> indicies;				// Holds all indicies of our current path.
+	int index = 0;						// Index of current node in nodes vector.
+	int endOfPath = 0;					// Last index in the path, will keep setting it until -1 to find the full path. 
+
+	// Cycle variables.
+	int lat = latency;					// Saves the current latency. (set to max latency at start)
+	int numCycles = 0;					// Number of cycles current node uses.
+
+	// End condition.
+	int numSchedNode = 0;				// Total scheduled nodes (end condition for loop).
 
 	while (numSchedNode != size) {
-			// Find the path.
-		  for (vector<Nodes>::size_type i = nodes.size() - 1; i != 0; i--) {
-        if (nodes.at(i).getOperation().compare((*tempPt).getOperation()) == 0) {
-          if (foundNode == false) {
-            startPath = i;
-          }
-          index = i;
-        }
-		}
-
-		// How we schedule.
-		numCycles = nodes.at(index).getNumCycles(); // Find number of cycles.
-		lat = lat - numCycles;						// Set latency based on node.
-		nodes.at(index).setALAP(lat);
-		numSchedNode++;
-
-		// Couldn't find a new node.
-		if (indEdge == nodes.at(index).getEdges().size()) {
-			foundNode = false;
-			indEdge = 0;
-		}
-		else {
-			// Itterate through edges to find next node.
-			tempPt = nodes.at(index).getEdges().at(indEdge).getPrevNode();
-			indEdge++;
+		/* Find the first node in path.
+		 *	Iterate through the nodes vector to find the first uncheduled node in a path.
+		 */
+		for (vector<Nodes>::size_type i = 0; i != nodes.size(); i++) {
+			if (nodes.at(i).getALAP() < 0) {
+				indicies.push_back(i);
+				i = nodes.size();
+			}
 		}
 		
-		if (foundNode == false) {
-			lat = latency;
-			//while () {
-
-			//}
+		// Find the Path.
+		while (endOfPath >= 0) {
+			// Find the Edge
+			tempNode = nodes.at(endOfPath);
+			// Iterate through the node's edge vector to find the next node and schedule the path.
+			for (vector<Edges>::size_type j = 0; j != tempNode.getEdges().size(); j++) {
+				tempEdge = tempNode.getEdges().at(j); // Set a temp edge for ease of reading and programming.
+				endOfPath = tempEdge.getNextNode();
+				if (endOfPath >= 0) {
+					if (nodes.at(endOfPath).getALAP() >= 0) { // next node hasn't been scheduled.
+						// Found next part of our path.
+						indicies.push_back(endOfPath); // add it to our path vector.
+						j = tempNode.getEdges.size(); // set search index to exit parameter (size of the edge vector in our node). Basically, exit the loop.	
+					}
+				}
+				else {
+					// End of path found.
+					j = tempNode.getEdges.size(); // set search index to exit parameter (size of the edge vector in our node). Basically, exit the loop.				
+				}
+			}
 		}
+
+		// Now that we have path, we need to iterate through it backwards.
+		for (vector<Edges>::size_type k = indicies.size() - 1; k >= 0; k--) {
+			// Find index.
+			index = indicies.at(k);
+
+			// How we schedule.
+			numCycles = nodes.at(index).getNumCycles(); // Find number of cycles.
+			lat = lat - numCycles;						// Set latency based on node.
+			nodes.at(index).setALAP(lat);
+			numSchedNode++;
+		}
+
+		// Set the temp latency back to our max for the next path.
+		lat = latency;
+
+		// Reset the indicies vector.
+		indicies.clear();
 	}
 }
 

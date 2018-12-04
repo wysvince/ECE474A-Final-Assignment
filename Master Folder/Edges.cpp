@@ -6,7 +6,7 @@ using namespace std;
 
 Edges::Edges() {} // default constructor
 
-Edges::Edges(string condOp, Nodes* newPrevNode, Nodes* newNextNode) {
+Edges::Edges(string condOp, int newPrevNode, int newNextNode) {
 	this->conditionalOperation = condOp;
 	this->prevNode = newPrevNode;
 	this->nextNode = newNextNode;
@@ -17,12 +17,19 @@ void Edges::setCondtionalOperation(string condOp) {
 	this->conditionalOperation = condOp;
 }
 
-void Edges::setPrevNode(Nodes* newPrevNode) {
+void Edges::setPrevNode(int newPrevNode) {
 	this->prevNode = newPrevNode;
 }
 
-void Edges::setNextNode(Nodes* newNextNode) {
+void Edges::setNextNode(int newNextNode) {
 	this->nextNode = newNextNode;
+}
+
+
+void Edges::init() {
+	this->conditionalOperation = "";
+	this->prevNode = -1;
+	this->nextNode = -1;
 }
 
 // getters
@@ -30,10 +37,10 @@ string Edges::getConditionalOperation() {
 	return this->conditionalOperation;
 }
 
-Nodes* Edges::getPrevNode() {
+int Edges::getPrevNode() {
 	return this->prevNode;
 }
 
-Nodes* Edges::getNextNode() {
+int Edges::getNextNode() {
 	return this->nextNode;
 }

@@ -39,8 +39,26 @@ void Nodes::setCycleCount(int num)
 	this->cycleCount += num;
 }
 
+void Nodes::setASAP(int time) {
+	this->asapTime = time;
+}
+
 void Nodes::setALAP(int time) {
 	this->alapTime = time;
+}
+
+void Nodes::init() {
+	if (edges.size() > 0) {
+		this->edges.clear();
+	}
+	this->stateNum   = 0;
+	this->numCycles  = 0;
+	this->operation	 = "";
+	this->alapTime	 = -1;
+	this->asapTime	 = -1;
+	this->listRTime	 = -1;
+	this->slack		 = 0;
+	this->cycleCount = 0;
 }
 
 // getters

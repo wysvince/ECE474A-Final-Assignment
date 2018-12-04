@@ -36,7 +36,9 @@ public:
 	void setOperation(string op);
 	void setSlack(int num);
 	void setCycleCount(int num);
+	void setASAP(int time);
 	void setALAP(int time);
+	void init();
 
 	//getters
 	int getStateNum();
