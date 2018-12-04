@@ -150,7 +150,7 @@ void Graph::createALAPSchedule(int latency){
 	// Graph variables.
 	Edges tempEdge;						// Temporary Edge.
 	Nodes tempNode;						// Temporary node to save nodes if needed.
-	int size = this->nodes.size();			// Size of the nodes vector
+	int size = this->nodes.size();		// Size of the nodes vector
 
 	int curALAP;						// Current ALAP value.
 
@@ -188,11 +188,9 @@ void Graph::createALAPSchedule(int latency){
 				tempEdge = tempNode.getEdges().at(j); // Set a temp edge for ease of reading and programming.
 				endOfPath = tempEdge.getNextNode();
 				if (endOfPath >= 0) {
-					//if (this->nodes.at(endOfPath).getALAP() < 0) { // next node hasn't been scheduled.
 						// Found next part of our path.
 						indicies.push_back(endOfPath); // add it to our path vector.
 						j = tempNode.getEdges().size(); // set search index to exit parameter (size of the edge vector in our node). Basically, exit the loop.	
-					//}
 				}
 				else {
 					// End of path found.
@@ -205,13 +203,19 @@ void Graph::createALAPSchedule(int latency){
 		for (vector<Edges>::size_type k = indicies.size() - 1; k < 100; k--) {
 			// Find index.
 			index = indicies.at(k);
+			numCycles = this->nodes.at(index).getNumCycles();	// Find number of cycles.
+			if (numCycles == 2) {
+				lat = lat - 1;
+			}
+			else if (numCycles == 3) {
+				lat = lat = 2;
+			}
 			if (this->nodes.at(index).getALAP() < 0) {
 				// How we schedule.
-				numCycles = this->nodes.at(index).getNumCycles();	// Find number of cycles.
 				this->nodes.at(index).setALAP(lat);					// Set ALAP to be the current lat value.
 				numSchedNode++;										// Increment the number of scheduled nodes.
-				lat = lat - numCycles;								// Set latency based on node.
 			}
+			lat = lat - 1;								// Set latency based on node.
 		}
 
 		// Set the temp latency back to our max for the next path.
