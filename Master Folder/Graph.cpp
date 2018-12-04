@@ -152,6 +152,8 @@ void Graph::createALAPSchedule(int latency){
 	Nodes tempNode;						// Temporary node to save nodes if needed.
 	int size = nodes.size();			// Size of the nodes vector
 
+	int curALAP;						// Current ALAP value.
+
 	// Indicies variables.
 	vector <int> indicies;				// Holds all indicies of our current path.
 	int index = 0;						// Index of current node in nodes vector.
@@ -168,8 +170,9 @@ void Graph::createALAPSchedule(int latency){
 		/* Find the first node in path.
 		 *	Iterate through the nodes vector to find the first uncheduled node in a path.
 		 */
-		for (vector<Nodes>::size_type i = 0; i != nodes.size(); i++) {
-			if (nodes.at(i).getALAP() < 0) {
+		for (vector<Nodes>::size_type i = 0; i > nodes.size() - 1; i++) {
+			curALAP = nodes.at(i).getALAP();
+			if (curALAP < 0) {
 				indicies.push_back(i);
 				i = nodes.size();
 			}
@@ -180,19 +183,19 @@ void Graph::createALAPSchedule(int latency){
 			// Find the Edge
 			tempNode = nodes.at(endOfPath);
 			// Iterate through the node's edge vector to find the next node and schedule the path.
-			for (vector<Edges>::size_type j = 0; j != tempNode.getEdges().size(); j++) {
+			for (vector<Edges>::size_type j = 0; j > tempNode.getEdges().size() - 1; j++) {
 				tempEdge = tempNode.getEdges().at(j); // Set a temp edge for ease of reading and programming.
 				endOfPath = tempEdge.getNextNode();
 				if (endOfPath >= 0) {
 					if (nodes.at(endOfPath).getALAP() >= 0) { // next node hasn't been scheduled.
 						// Found next part of our path.
 						indicies.push_back(endOfPath); // add it to our path vector.
-						j = tempNode.getEdges.size(); // set search index to exit parameter (size of the edge vector in our node). Basically, exit the loop.	
+						j = tempNode.getEdges().size(); // set search index to exit parameter (size of the edge vector in our node). Basically, exit the loop.	
 					}
 				}
 				else {
 					// End of path found.
-					j = tempNode.getEdges.size(); // set search index to exit parameter (size of the edge vector in our node). Basically, exit the loop.				
+					j = tempNode.getEdges().size(); // set search index to exit parameter (size of the edge vector in our node). Basically, exit the loop.				
 				}
 			}
 		}
