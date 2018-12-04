@@ -181,10 +181,11 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	
 	// Testing --------------------------------------------
 	file << "Graph: \n" << "\tWeight: " << weight << "\n";
-	for (int temp = 0; temp < 10; temp++) {
-		file << "\tNode " << temp << ": " << nodes.at(temp).getOperation() << endl;
-		file << "\tEdge " << temp << ": " << edges.at(temp).getConditionalOperation() << endl;
-		file << "\tALAP " << temp << ": " << nodes.at(temp).getALAP() << endl;// Just for Debug.
+	for (vector<Nodes>::size_type i = 0; i < nodes.size(); i++) {
+		file << "Operation: " << nodes.at(i).getOperation() << endl;
+		file << "ALAP Time: " << nodes.at(i).getALAP() << endl;
+		file << "ASAP Time: " << nodes.at(i).getASAP() << endl;
+		file << "\n";
 	}
 	file << "\n\n";
 	// ----------------------------------------------------

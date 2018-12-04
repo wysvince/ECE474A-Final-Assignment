@@ -92,6 +92,10 @@ int Nodes::getALAP() {
 	return this->alapTime;
 }
 
+int Nodes::getASAP() {
+	return this->asapTime;
+}
+
 //Methods
 
 void Nodes::addEdge(Edges newEdge) {

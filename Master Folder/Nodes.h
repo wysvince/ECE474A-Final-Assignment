@@ -48,6 +48,7 @@ public:
 	int getSlack();
 	int getCycleCount();
 	int getALAP();
+	int getASAP();
 
 	//Methods
 	void addEdge(Edges newEdge);
