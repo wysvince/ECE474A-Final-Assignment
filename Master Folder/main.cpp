@@ -93,6 +93,7 @@ int main(int argc, char* argv[]) {
 	tempNode.setOperation("d = a + b");
 	tempNode.setNumCycles(1);
 	tempNode.setASAP(1);
+	tempNode.setListR(1);
 	tempEdge.setPrevNode(0);
 	tempEdge.setNextNode(2);
 	tempNode.addEdge(tempEdge);
@@ -106,6 +107,7 @@ int main(int argc, char* argv[]) {
 	tempNode.setOperation("e = a + c");
 	tempNode.setNumCycles(1);
 	tempNode.setASAP(1);
+	tempNode.setListR(2);
 	tempEdge.setPrevNode(1);
 	tempEdge.setNextNode(2);
 	tempNode.addEdge(tempEdge);
@@ -119,6 +121,7 @@ int main(int argc, char* argv[]) {
 	tempNode.setOperation("g = d > e");
 	tempNode.setNumCycles(1);
 	tempNode.setASAP(2);
+	tempNode.setListR(3);
 	tempEdge.setPrevNode(2);
 	tempEdge.setNextNode(3);
 	tempNode.addEdge(tempEdge);
@@ -132,6 +135,7 @@ int main(int argc, char* argv[]) {
 	tempNode.setOperation("z = g ? d : e");
 	tempNode.setNumCycles(1);
 	tempNode.setASAP(3);
+	tempNode.setListR(4);
 	tempEdge.setPrevNode(3);
 	tempNode.addEdge(tempEdge);
 	graph.addNode(tempNode);
@@ -144,6 +148,7 @@ int main(int argc, char* argv[]) {
 	tempNode.setOperation("f = a * c");
 	tempNode.setNumCycles(2);
 	tempNode.setASAP(1);
+	tempNode.setListR(1);
 	tempEdge.setPrevNode(4);
 	tempEdge.setNextNode(5);
 	tempNode.addEdge(tempEdge);
@@ -157,6 +162,7 @@ int main(int argc, char* argv[]) {
 	tempNode.setOperation("x = f - d");
 	tempNode.setNumCycles(1);
 	tempNode.setASAP(2);
+	tempNode.setListR(3);
 	tempEdge.setPrevNode(5);
 	tempNode.addEdge(tempEdge);
 	graph.addNode(tempNode);

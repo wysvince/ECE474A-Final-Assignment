@@ -178,7 +178,53 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	//edges = graph.getEdges();
 	nodes = graph.getNodes();
 	weight = graph.getWeight();
+
+	int numBits;
+
+	// Find the number of bits.
+	numBits = this->findNumBits(nodes.size()) + 2; //  total number of states + 2 for wait and final.
 	
+	// Write State machine.
+	// Write States:
+	file << "reg [" << numBits - 1 << ", 0] state;" << endl; // total number of states -1 because we're assigning it's binary value.
+	file << "Wait = " << numBits << "'d0;" << endl;
+	for (vector<Nodes>::size_type ind = 0; ind < nodes.size(); ind++) {
+		file << "s" << ind + 1  << " = " << numBits << "'d" << ind + 1  << ";"<< endl; // + 1 because we're starting at the second point in the binary number.
+	}
+	file << "Final = " << numBits << "'d" << nodes.size() + 1 << ";" << endl;
+
+	// Start always @ (posedge Clk):
+	file << "always @ (posedge Clk) begin : FSM" << endl;
+	
+	// Start If
+	file << "\tif(Rst == 1'b1)begin" << endl;
+	file << "\t\tstate <= Wait;" << endl;
+	file << "\tend else\n" << endl; // Start else
+
+	// Start Case:
+	file << "\tcase(state)" << endl;
+
+	// Define Wait Case:
+	file << "\t\tWait : if (Start == 1'b1) begin" << endl;
+	file << "\t\t\t\t   state <= s1" << endl;
+	file << "\t\t\t   end" << endl;
+
+	// Define Scheduled State Cases:
+	file << "\n\n\t\t// Define scheduled state cases here....\n\n" << endl;
+
+	// Define Final Case:
+	// Define Wait Case:
+	file << "\t\tFinal : Done <= 1'b1; State <= Wait;\n" << endl;
+
+	// Default Case:
+	file << "\t\tdefault: state <= Wait;" << endl;
+
+	// End Case:
+	file << "\tendcase" << endl;
+
+	// End always @ (posedge Clk):
+	file << "end" << endl;
+
 	// Testing --------------------------------------------
 	file << "Graph: \n" << "\tWeight: " << weight << "\n";
 	for (vector<Nodes>::size_type i = 0; i < nodes.size(); i++) {
@@ -189,4 +235,23 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	}
 	file << "\n\n";
 	// ----------------------------------------------------
+}
+
+// Determines the number of bits we need for our states.
+int WriteOutputFile::findNumBits(int numNodes) {
+	if (numNodes < 2) {
+		return 1;
+	}
+	else if (numNodes < 4) {
+		return 2;
+	}
+	else if (numNodes < 8) {
+		return 3;
+	}
+	else if (numNodes < 16) { 
+		return 4;
+	}
+	else { // Probably not going to have more that 20 nodes so max will be 32.
+		return 5;
+	}
 }

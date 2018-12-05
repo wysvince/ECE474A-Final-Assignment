@@ -26,6 +26,7 @@ public:
 	void createHLSMHeader(ofstream & file);
 	void writeGraph(ofstream & file, Graph graph);
 	
+	int findNumBits(int numNodes);
 
 	// test
 	vector<Edges> edges;

@@ -47,6 +47,10 @@ void Nodes::setALAP(int time) {
 	this->alapTime = time;
 }
 
+void Nodes::setListR(int time) {
+	this->listRTime = time;
+}
+
 void Nodes::init() {
 	if (edges.size() > 0) {
 		this->edges.clear();
@@ -94,6 +98,10 @@ int Nodes::getALAP() {
 
 int Nodes::getASAP() {
 	return this->asapTime;
+}
+
+int Nodes::getListR() {
+	return this->listRTime;
 }
 
 //Methods
