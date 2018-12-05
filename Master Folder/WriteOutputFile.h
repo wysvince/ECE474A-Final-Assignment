@@ -25,6 +25,7 @@ public:
 	void writeOperations(ofstream &file, ReadInputFile &read);
 	void createHLSMHeader(ofstream & file);
 	void writeGraph(ofstream & file, Graph graph);
+	void wirteStates(ofstream & file, Graph graph);
 	
 	int findNumBits(int numNodes);
 
