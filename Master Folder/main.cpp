@@ -205,6 +205,7 @@ int main(int argc, char* argv[]) {
 
 		// DEBUG ONLY ----------------------------------
 		cout << "\n\n\n";
+		write.createHLSMHeader(outputFilename);
 		write.writeGraph(outputFilename, graph);
 		// DEBUG ONLY ----------------------------------
 

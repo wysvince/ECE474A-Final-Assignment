@@ -186,47 +186,51 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	
 	// Write State machine.
 	// Write States:
-	file << "reg [" << numBits - 1 << ", 0] state;" << endl; // total number of states -1 because we're assigning it's binary value.
-	file << "Wait = " << numBits << "'d0;" << endl;
+	file << "\treg [" << numBits - 1 << ", 0] state;\n" << endl; // total number of states -1 because we're assigning it's binary value.
+	file << "\tWait = " << numBits << "'d0;" << endl;
 	for (vector<Nodes>::size_type ind = 0; ind < nodes.size(); ind++) {
-		file << "s" << ind + 1  << " = " << numBits << "'d" << ind + 1  << ";"<< endl; // + 1 because we're starting at the second point in the binary number.
+		file << "\ts" << ind + 1  << " = " << numBits << "'d" << ind + 1  << ";"<< endl; // + 1 because we're starting at the second point in the binary number.
 	}
-	file << "Final = " << numBits << "'d" << nodes.size() + 1 << ";" << endl;
+	file << "\tFinal = " << numBits << "'d" << nodes.size() + 1 << ";\n" << endl;
 
 	// Start always @ (posedge Clk):
-	file << "always @ (posedge Clk) begin : FSM" << endl;
+	file << "\talways @ (posedge Clk) begin : FSM" << endl;
 	
 	// Start If
-	file << "\tif(Rst == 1'b1)begin" << endl;
-	file << "\t\tstate <= Wait;" << endl;
-	file << "\tend else\n" << endl; // Start else
+	file << "\t\tif(Rst == 1'b1)begin" << endl;
+	file << "\t\t\tstate <= Wait;" << endl;
+	file << "\t\tend else\n" << endl; // Start else
 
 	// Start Case:
-	file << "\tcase(state)" << endl;
+	file << "\t\tcase(state)" << endl;
 
 	// Define Wait Case:
-	file << "\t\tWait : if (Start == 1'b1) begin" << endl;
-	file << "\t\t\t\t   state <= s1" << endl;
-	file << "\t\t\t   end" << endl;
+	file << "\t\t\tWait : if (Start == 1'b1) begin" << endl;
+	file << "\t\t\t\t\t   state <= s1" << endl;
+	file << "\t\t\t\t   end" << endl;
 
 	// Define Scheduled State Cases:
-	file << "\n\n\t\t// Define scheduled state cases here....\n\n" << endl;
+	file << "\n\n\t\t\t// Define scheduled state cases here....\n\n" << endl;
 
 	// Define Final Case:
 	// Define Wait Case:
-	file << "\t\tFinal : Done <= 1'b1; State <= Wait;\n" << endl;
+	file << "\t\t\tFinal : Done <= 1'b1; State <= Wait;\n" << endl;
 
 	// Default Case:
-	file << "\t\tdefault: state <= Wait;" << endl;
+	file << "\t\t\tdefault: state <= Wait;" << endl;
 
 	// End Case:
-	file << "\tendcase" << endl;
+	file << "\t\tendcase" << endl;
 
 	// End always @ (posedge Clk):
+	file << "\tend" << endl;
+
+	// End the module.
 	file << "end" << endl;
 
 	// Testing --------------------------------------------
-	file << "Graph: \n" << "\tWeight: " << weight << "\n";
+	file << "\n\n// Just For testing will remove later:" << endl;
+	file << "Graph: \n" << "Weight: " << weight << "\n";
 	for (vector<Nodes>::size_type i = 0; i < nodes.size(); i++) {
 		file << "Operation: " << nodes.at(i).getOperation() << endl;
 		file << "ALAP Time: " << nodes.at(i).getALAP() << endl;
