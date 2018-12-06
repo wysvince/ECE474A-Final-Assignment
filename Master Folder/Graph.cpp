@@ -30,7 +30,7 @@ void Graph::setAlapSchedule(int num)
 	this->alapSchedule.push_back(num);
 }
 
-void Graph::setListRSchedule(Nodes node)
+void Graph::setListRSchedule(int node)
 {
 	this->listRSchedule.push_back(node);
 }
@@ -54,7 +54,7 @@ vector<int> Graph::getAlapSchedule()
 	return this->alapSchedule;
 }
 
-vector<Nodes> Graph::getListRSchedule()
+vector<int> Graph::getListRSchedule()
 {
 	return this->listRSchedule;
 }
@@ -62,71 +62,105 @@ vector<Nodes> Graph::getListRSchedule()
 //Methods
 void Graph::createListRSchedule(int latency)
 {
-	vector<int>::iterator it;
+	//vector<int>::iterator it;
 	vector<Nodes> tempList = nodes;
+	int tempSlack = 999;
+	Nodes tempNode;
+	vector<Nodes> noDepenciesNodesList;
+	int index = -1;
 
 	// latency constrained, considers minimum resource
 	for (int cycle = 1; cycle < (latency + 1); cycle++) {
-		for (unsigned int n = 0; n < nodes.size(); n++) {
-			
+		tempSlack = 999;
+		// set slack time for current cycle for the remaining nodes
+		for (unsigned int j = 0; j < tempList.size(); j++) {
+			int alapTime = nodes.at(j).getALAP();
+			int slack = nodes.at(j).calculateSlack(alapTime, cycle);
+			nodes.at(j).setSlack(slack);
 		}
-	}
-}
 
-// update unscheduled nodes
-// Criteria: unscheduled nodes needs to have dependency resolved
-void Graph::updateU(Nodes node) {
-	for (unsigned int i = 0; i < U.size(); i++) {
-		Nodes u = U.at(i);
-		// update all unscheduled Nodes
-		if (checkConstraint(u) == false) {
-			///////////////////////////////PICK UP FROM HERE//////////
-		}
-	}
-}
-
-// update scheduled nodes
-void Graph::updateS() {
-	for (unsigned int i = 0; i < S.size(); i++) {
-		Nodes s = S.at(i);
-		// update all scheduled Nodes cycle count
-		if (s.getCycleCount() != 0) {
-			s.setCycleCount(-1);
-		}
-		else {
-			// Move completed node to listR Schedule
-			S.erase(S.begin() + i);
-			this->listRSchedule.push_back(s);
-		}
-	}
-}
-
-// Criteria: scheduled nodes needs to check the Node's cycle 
-bool Graph::checkConstraint(Nodes node) {
-	bool flag = false;
-	int index = 0;
-	// node is a mult operation type
-	// check if schedule list contains existing mult operation
-	if (node.getNumCycles() == 2) {
-		for (Nodes s : S) {
-			if (s.getNumCycles() == 2 && s.getCycleCount() != 0) {
-				flag = true;
-			}
-		}
-	}
-	else {
-		// check for dependencies in scheduled nodes
-		for (Nodes s : S) {
-			for (Edges e : s.getEdges()) {
-				if (e.getNextNode() == index) { // Need to find index of node in nodes.
-					flag = true; // found dependency
+		// add nodes without previous dependencies to unscheduled list
+		for (unsigned int k = 0; k < tempList.size(); k++) {
+			for (unsigned int l = 0; l < tempList.at(k).getEdges().size(); l++) {
+				if (tempList.at(k).getEdges().at(l).getPrevNode() == NULL) {
+					U.push_back(tempList.at(k));
+					// remove added nodes from tempList
+					tempList.erase(tempList.begin() + k);
 				}
 			}
-			index++;
 		}
+
+		// add unscheduled nodes to scheduled list
+		if (S.empty() && !(U.empty())) {	// scheduled list is empty
+			// find unscheduled nodes with lowest slack
+			for (unsigned int i = 0; i < U.size(); i++) {
+				// find node with lowest slack
+				if (U.at(i).getSlack() < tempSlack) {
+					tempSlack = U.at(i).getSlack();
+					index = i;
+				}
+				S.push_back(U.at(index));
+				U.erase(U.begin() + index);
+				// when unscheduled list is not empty
+				if (S.at(index).getNumCycles() == 2 && !(U.empty())) {
+					for (unsigned j = 0; j < U.size(); j++) {
+						if (U.at(j).getNumCycles() == 1) {
+							// find node with lowest slack
+							if (U.at(j).getSlack() < tempSlack) {
+								tempSlack = U.at(j).getSlack();
+								index = j;
+							}
+						}
+						else {
+							if (U.at(j).getSlack() < tempSlack) {
+								tempSlack = U.at(j).getSlack();
+								index = j;
+							}
+						}
+					}
+				}
+				S.push_back(U.at(index));
+				U.erase(U.begin() + index);
+			}
+		}
+		// when scheduled list is not empty
+		// needs to check constraints before adding unscheduled nodes:
+		//	1.	Unscheduled node should not have dependency with current scheduled nodes
+		//	2.	If unscheduled node is a multiplier operation, check that if there are any
+		//		scheduled node whose operation is also a multiplier (2 cycles)
+		//	3.	Current cycle means the previous cycle has ended, so there is room for a new add operation node
+		else {	
+			// check Constraint 1:
+			for (unsigned int i = 0; i < S.size(); i++) {
+
+			}
+		}
+
+		for (unsigned int i = 0; i < nodes.size(); i++) {				
+
+				/* Needs to check for scheduled nodes dependencies, nodes without
+				 depencies can be added to scheduled or unscheduled list */
+				
+
+				// update unscheduled list does not need to check for constraints
+				/* empty unscheduled list */
+				if (U.empty()) {	
+					U.push_back(tempNode);
+				}
+				/* non-empty unscheduled list*/
+				else {
+
+				}
+				if (i == nodes.size()) { // no more nodes to schedule, breaks out of loop
+					cycle = latency + 1;
+					break;
+				}
+			
+		}
+		
 	}
-	return flag;
 }
+
 
 void Graph::createUnscheduledList(){
 	for (vector<Nodes>::size_type i = nodes.size(); i != 0; i++) {

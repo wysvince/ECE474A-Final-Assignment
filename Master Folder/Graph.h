@@ -23,7 +23,7 @@ private:
 	vector<int> alapSchedule;
 
 	// List R Scheduling:
-	vector<Nodes> listRSchedule;
+	vector<int> listRSchedule;
 	vector<Nodes> U; // candidate operations (Node's index)
 	vector<Nodes> S; // scheduled nodes
 
@@ -37,22 +37,19 @@ public:
 	void setNodes(Nodes newNodes);
 	void setWeight(int newWeight);
 	void setAlapSchedule(int num);
-	void setListRSchedule(Nodes node);
+	void setListRSchedule(int node);
 
 	//getters
 	vector<Nodes> getNodes();
 	int getWeight();
 	vector<int> getAlapSchedule();
-	vector<Nodes> getListRSchedule();
+	vector<int> getListRSchedule();
 
 	//methods
 	// void generateALAPTimeTable(); // unsure where to place this yet
 	// void generateList_RSchedule(); // unsure where to plae this yet
 	//void calculateWeights(Operations &op);
 	void createListRSchedule(int latency);
-	void updateU(Nodes node);
-	void updateS();
-	bool checkConstraint(Nodes node);
 	void createUnscheduledList();
 	void createALAPSchedule(int latency);
 	void addNode(Nodes newNode);

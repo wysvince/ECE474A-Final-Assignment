@@ -177,6 +177,11 @@ int main(int argc, char* argv[]) {
 	cout << "Start ALAP" << endl;
 	graph.createALAPSchedule(7);
 	cout << "End ALAP" << endl;
+
+	cout << "Start ListR" << endl;
+	graph.createListRSchedule(7);
+	cout << "End ListR" << endl;
+
 	// ----------------------------------------------------
 	// Done: Generate graph
 	// Generate ALAP Schedule
@@ -208,6 +213,7 @@ int main(int argc, char* argv[]) {
 		write.createHLSMHeader(outputFilename);
 		write.writeGraph(outputFilename, graph);
 		// DEBUG ONLY ----------------------------------
+
 
 		// close output file
 		outputFilename.close();

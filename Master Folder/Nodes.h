@@ -14,7 +14,7 @@ class Edges;
 class Nodes {
 
 private:
-	int stateNum;
+	int nodeNum;
 	vector<Edges> edges;
 	int numCycles;
 	string operation;
@@ -42,7 +42,7 @@ public:
 	void init();
 
 	//getters
-	int getStateNum();
+	int getNodeNum();
 	vector<Edges> getEdges();
 	int getNumCycles();
 	string getOperation();
@@ -54,7 +54,7 @@ public:
 
 	//Methods
 	void addEdge(Edges newEdge);
-	void calculateSlack(int alapTime, int currCycle);
+	int calculateSlack(int alapTime, int currCycle);
 
 };
 

@@ -3,10 +3,17 @@
 using namespace std;
 
 // constructors
-Nodes::Nodes() {} // default constructor
+Nodes::Nodes() {
+	this->alapTime = -1;
+	this->asapTime = -1;
+	this->listRTime = -1;
+	this->slack = 0;
+	this->cycleCount = 0;
+	
+} // default constructor
 
 Nodes::Nodes(int newStateNum, Edges newEdges, int newNumCycles, string op) {
-	this->stateNum = newStateNum;
+	this->nodeNum = newStateNum;
 	this->edges.push_back(newEdges);
 	this->numCycles = newNumCycles;
 	this->operation = op;
@@ -14,7 +21,7 @@ Nodes::Nodes(int newStateNum, Edges newEdges, int newNumCycles, string op) {
 
 // setters
 void Nodes::setStateNum(int newStateNum) {
-	this->stateNum = newStateNum;
+	this->nodeNum = newStateNum;
 }
 
 void Nodes::setEdges(Edges newEdges) {
@@ -55,7 +62,7 @@ void Nodes::init() {
 	if (edges.size() > 0) {
 		this->edges.clear();
 	}
-	this->stateNum   = 0;
+	this->nodeNum   = 0;
 	this->numCycles  = 0;
 	this->operation	 = "";
 	this->alapTime	 = -1;
@@ -66,8 +73,8 @@ void Nodes::init() {
 }
 
 // getters
-int Nodes::getStateNum() {
-	return this->stateNum;
+int Nodes::getNodeNum() {
+	return this->nodeNum;
 }
 
 vector<Edges> Nodes::getEdges() {
@@ -110,12 +117,13 @@ void Nodes::addEdge(Edges newEdge) {
 	edges.push_back(newEdge);
 }
 
-void Nodes::calculateSlack(int alapTime, int currCycle)
+int Nodes::calculateSlack(int alapTime, int currCycle)
 {
 	slack = alapTime - currCycle;
 	if (slack < 0) {
 		slack = 0;
 	}
+	return this->slack;
 }
 
 

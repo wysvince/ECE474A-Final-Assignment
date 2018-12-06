@@ -240,6 +240,7 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 		file << "Operation: " << nodes.at(i).getOperation() << endl;
 		file << "ALAP Time: " << nodes.at(i).getALAP() << endl;
 		file << "ASAP Time: " << nodes.at(i).getASAP() << endl;
+		file << "ListR Time: " << nodes.at(i).getListR() << endl;
 		file << "\n";
 	}
 	file << "\n\n";
