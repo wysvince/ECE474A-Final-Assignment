@@ -178,14 +178,94 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	//edges = graph.getEdges();
 	nodes = graph.getNodes();
 	weight = graph.getWeight();
+
+	int numBits;
+
+	// Find the number of bits.
+	numBits = this->findNumBits(nodes.size()) + 2; //  total number of states + 2 for wait and final.
 	
+	// Write State machine.
+	// Write States:
+	file << "\treg [" << numBits - 1 << ", 0] state;\n" << endl; // total number of states -1 because we're assigning it's binary value.
+	file << "\treg [" << numBits - 1 << ", 0] Wait = " << numBits << "'d0;" << endl;
+	for (vector<Nodes>::size_type ind = 0; ind < nodes.size(); ind++) {
+		file << "\treg [" << numBits - 1 << ", 0] s" << ind + 1  << " = " << numBits << "'d" << ind + 1  << ";"<< endl; // + 1 because we're starting at the second point in the binary number.
+	}
+	file << "\treg [" << numBits - 1 << ", 0] Final = " << numBits << "'d" << nodes.size() + 1 << ";\n" << endl;
+
+	// Start always @ (posedge Clk):
+	file << "\talways @ (posedge Clk) begin : FSM" << endl;
+	
+	// Start If
+	file << "\t\tif(Rst == 1'b1)begin" << endl;
+	file << "\t\t\tstate <= Wait;" << endl;
+	file << "\t\tend else\n" << endl; // Start else
+
+	// Start Case:
+	file << "\t\tcase(state)" << endl;
+
+	// Define Wait State:
+	file << "\t\t\tWait : begin" << endl;											// Start the Wait State:
+	file << "\t\t\t\tif (Start == 1'b1) begin" << endl;								// If statement for Wait State, if (start == 1) Begin... 
+	file << "\t\t\t\t\tstate <= s1" << endl;										// Set next state to be first node.
+	file << "\t\t\t\tend" << endl;													// End the if.
+	file << "\t\t\tend" << endl;													// End the state:
+
+	// Define Scheduled State Cases:
+	file << "\n\n\t\t\t// Define scheduled state cases here....\n\n" << endl;
+
+	// Define Final State:
+	file << "\t\t\tFinal : begin" << endl;											// Begin Final State.
+	file << "\t\t\t\tDone <= 1'b1;" << endl << "\t\t\t\tState <= Wait;" << endl;	// Contents of Final State. (Set Done <= 1 and go to wait)
+	file << "\t\t\tend\n" << endl;													// End Final State.
+
+	// Default State:
+	file << "\t\t\tdefault : begin" << endl;										// Begin Default state.
+	file << "\t\t\t\tstate <= Wait;" << endl;										// Contents of default state. (go to wait)
+	file << "\t\t\tend\n" << endl;													// End Default.
+
+	// End Case:
+	file << "\t\tendcase" << endl;
+
+	// End always @ (posedge Clk):
+	file << "\tend" << endl;
+
+	// End the module.
+	file << "endmodule" << endl;
+
 	// Testing --------------------------------------------
-	file << "Graph: \n" << "\tWeight: " << weight << "\n";
-	for (int temp = 0; temp < 10; temp++) {
-		file << "\tNode " << temp << ": " << nodes.at(temp).getOperation() << endl;
-		file << "\tEdge " << temp << ": " << edges.at(temp).getConditionalOperation() << endl;
-		file << "\tALAP " << temp << ": " << nodes.at(temp).getALAP() << endl;// Just for Debug.
+	file << "\n\n// Just For testing will remove later:" << endl;
+	file << "Graph: \n" << "Weight: " << weight << "\n";
+	for (vector<Nodes>::size_type i = 0; i < nodes.size(); i++) {
+		file << "Operation: " << nodes.at(i).getOperation() << endl;
+		file << "ALAP Time: " << nodes.at(i).getALAP() << endl;
+		file << "ASAP Time: " << nodes.at(i).getASAP() << endl;
+		file << "\n";
 	}
 	file << "\n\n";
 	// ----------------------------------------------------
+}
+
+
+void WriteOutputFile::wirteStates(ofstream & file, Graph graph) {
+
+}
+
+// Determines the number of bits we need for our states.
+int WriteOutputFile::findNumBits(int numNodes) {
+	if (numNodes < 2) {
+		return 1;
+	}
+	else if (numNodes < 4) {
+		return 2;
+	}
+	else if (numNodes < 8) {
+		return 3;
+	}
+	else if (numNodes < 16) { 
+		return 4;
+	}
+	else { // Probably not going to have more that 20 nodes so max will be 32.
+		return 5;
+	}
 }

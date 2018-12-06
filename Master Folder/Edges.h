@@ -13,24 +13,25 @@ class Nodes;
 class Edges {
 
 private:
-	string conditionalOperation;
-	Nodes* prevNode;
-	Nodes* nextNode;
+	string conditionalOperation;	// Condition if it is an if/else
+	int prevNode;					// Index of previous node in nodes (points to current node).
+	int nextNode;					// Index of next node in nodes     (points to next node).
 
 public:
 	// constructors
 	Edges();
-	Edges(string condOp, Nodes* newPrevNode, Nodes* newNextNode);
+	Edges(string condOp, int newPrevNode, int newNextNode);
 
 	//setters
 	void setCondtionalOperation(string condOp);
-	void setPrevNode(Nodes* newPrevNode);
-	void setNextNode(Nodes* newNextNode);
+	void setPrevNode(int newPrevNode);
+	void setNextNode(int newNextNode);
+	void init();
 
 	//getters
 	string getConditionalOperation();
-	Nodes* getPrevNode();
-	Nodes* getNextNode();
+	int getPrevNode();
+	int getNextNode();
 };
 
 #endif // !EDGES_H

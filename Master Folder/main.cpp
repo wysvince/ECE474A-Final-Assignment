@@ -39,8 +39,6 @@ int main(int argc, char* argv[]) {
 	Nodes tempNode;
 	Edges tempEdge;
 	int tempWeight = 0;
-	string cond = "Test Condition ";
-	string operation = "Operation ";
 	// --------------------------------------------
 
 
@@ -84,31 +82,108 @@ int main(int argc, char* argv[]) {
 //////////// Generate graph ////////////////////////////////////////////////////////////////////////////////////////////////
 	// Testing Graph Class -------------------------------
 	cout << "Start Writing Graph" << endl;
-	for (int temp = 0; temp < 10; temp++) {
-		cond = cond.substr(0, 15);
-		cond = cond + to_string(tempWeight);
-		operation = operation.substr(0, 10);
-		operation = operation + to_string(tempWeight);
 
-		tempEdge.setCondtionalOperation(cond);
-		tempNode.setEdges(tempEdge);
-		tempNode.setOperation(operation);
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
 
-		tempWeight++;
-		graph.setNodes(tempNode);
-		graph.setWeight(tempWeight);
-	}
+	// Test graph of "error1.c":
+
+	// Node 1
+	tempNode.setOperation("d = a + b");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(1);
+	tempNode.setListR(1);
+	tempEdge.setPrevNode(0);
+	tempEdge.setNextNode(2);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 2
+	tempNode.setOperation("e = a + c");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(1);
+	tempNode.setListR(2);
+	tempEdge.setPrevNode(1);
+	tempEdge.setNextNode(2);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 3
+	tempNode.setOperation("g = d > e");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(2);
+	tempNode.setListR(3);
+	tempEdge.setPrevNode(2);
+	tempEdge.setNextNode(3);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 4
+	tempNode.setOperation("z = g ? d : e");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(3);
+	tempNode.setListR(4);
+	tempEdge.setPrevNode(3);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 5
+	tempNode.setOperation("f = a * c");
+	tempNode.setNumCycles(2);
+	tempNode.setASAP(1);
+	tempNode.setListR(1);
+	tempEdge.setPrevNode(4);
+	tempEdge.setNextNode(5);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 6
+	tempNode.setOperation("x = f - d");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(2);
+	tempNode.setListR(3);
+	tempEdge.setPrevNode(5);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
 	cout << "Graph Written" << endl;
+	// End of Test graph writting.
+
 	cout << "Start ALAP" << endl;
 	graph.createALAPSchedule(7);
 	cout << "End ALAP" << endl;
 	// ----------------------------------------------------
 	// Done: Generate graph
 	// Generate ALAP Schedule
-	int latency = std::stoi(argv[2]);
-	graph.createALAPSchedule(latency);
+	//int latency = std::stoi(argv[2]);
+	//graph.createALAPSchedule(latency);
 	// Generate List_R Schedule
-	graph.createListRSchedule(latency);
+	//graph.createListRSchedule(latency);
 
 //////////// Generate states //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -130,6 +205,7 @@ int main(int argc, char* argv[]) {
 
 		// DEBUG ONLY ----------------------------------
 		cout << "\n\n\n";
+		write.createHLSMHeader(outputFilename);
 		write.writeGraph(outputFilename, graph);
 		// DEBUG ONLY ----------------------------------
 
