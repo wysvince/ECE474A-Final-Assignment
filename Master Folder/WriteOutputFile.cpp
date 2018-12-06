@@ -216,10 +216,10 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	file << "\t\t\t\tif (Start == 1'b1) begin" << endl;								// If statement for Wait State, if (start == 1) Begin... 
 	file << "\t\t\t\t\tstate <= s1" << endl;										// Set next state to be first node.
 	file << "\t\t\t\tend" << endl;													// End the if.
-	file << "\t\t\tend" << endl;													// End the state:
+	file << "\t\t\tend\n" << endl;													// End the state:
 
-	// Define Scheduled State Cases:
-	file << "\n\n\t\t\t// Define scheduled state cases here....\n\n" << endl;
+	// Schedule the States:
+	writeStates(file, nodes, numTimes);												// Reads in file, nodes vector, and the amount of time states we have, then writes all the time states.
 
 	// Define Final State:
 	file << "\t\t\tFinal : begin" << endl;											// Begin Final State.
@@ -254,8 +254,77 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 }
 
 
-void WriteOutputFile::wirteStates(ofstream & file, Graph graph) {
+void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int numTimes) {
+	int tempNum = 1;				// Saves the Time stamp, start at T1
+	vector <Nodes> tempNodes;		// Saves all nodes exicuting at current time stamp.
+	vector <Edges> tempEdges;		// Saves the node's edge vector.
+	Edges condEdge;
+	string tempCond;
+	int nextState;
 
+	while (tempNum <= numTimes) {
+		// Loop through the nodes vector to find nodes that should exicute in this time stamp.
+		for (vector<Nodes>::size_type nd = 0; nd < nodes.size(); nd++) {
+			// Check if current node exicutes in this time stamp
+			if (nodes.at(nd).getListR() == tempNum) {
+				tempNodes.push_back(nodes.at(nd)); // add it to our exicute vector.
+				tempEdges = nodes.at(nd).getEdges();
+				for (vector<Edges>::size_type eg = 0; eg < tempEdges.size(); eg++) {
+					if (tempEdges.at(eg).getConditionalOperation().compare(" ") != 0) {
+						condEdge = tempEdges.at(eg);
+					}
+				}
+			}
+		}
+
+		file << "\t\t\ts" << tempNum << " : begin" << endl;						// Start the state.
+		
+		// Add operations:
+		for (vector<Nodes>::size_type ind = 0; ind < tempNodes.size(); ind++) {
+			file << "\t\t\t\t" << tempNodes.at(ind).getOperation() << endl;		// Write the node's operation.
+		}
+
+		// Find the condition from condEdge.
+		tempCond = condEdge.getConditionalOperation();
+
+		// Check if we have reached the last time stamp.
+		if (tempCond.compare(" ") != 0) {
+			// Find the next State.
+			nextState = nodes.at(condEdge.getNextNode() - 1).getListR();
+
+			// If state.
+			file << "\n\t\t\t\tif( " << tempCond << " ) begin" << endl;
+			file << "\t\t\t\t\tstate <= s" << nextState << endl;
+			file << "\t\t\t\tend" << endl;
+
+			// Else state.
+			file << "\t\t\t\telse begin" << endl;
+			if (nextState == tempNum + 1) {
+				file << "\t\t\t\t\tstate <= s" << tempNum + 2 << endl;
+			}
+			else {
+				file << "\t\t\t\t\tstate <= s" << tempNum + 1 << endl;
+			}
+			file << "\t\t\t\tend" << endl;
+		}
+		else if (tempNum < numTimes) {
+			file << "\t\t\t\tstate <= s" << tempNum + 1 << endl;				// Write the next state.
+		}
+		else {
+			file << "\t\t\t\tstate <= Final" << endl;							// At the last time so go to Final state.
+		}
+
+		file << "\t\t\tend\n" << endl;											// End the state.
+
+		// Clear tempNodes for next time stamp.
+		tempNodes.clear();
+		// Clear tempEdges for next time stamp.
+		tempEdges.clear();
+		condEdge.setCondtionalOperation(" ");
+		tempCond = " ";
+
+		tempNum++;								// Increment the time.
+	}
 }
 
 // Determines the number of bits we need for our states.
