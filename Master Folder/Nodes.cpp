@@ -20,7 +20,7 @@ Nodes::Nodes(int newStateNum, Edges newEdges, int newNumCycles, string op) {
 }
 
 // setters
-void Nodes::setStateNum(int newStateNum) {
+void Nodes::setNodeNum(int newStateNum) {
 	this->nodeNum = newStateNum;
 }
 

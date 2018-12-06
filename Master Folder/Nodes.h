@@ -30,7 +30,7 @@ public:
 	Nodes(int newStateNum, Edges newEdges, int newNumCycles, string op);
 
 	//setters
-	void setStateNum(int newStateNum);
+	void setNodeNum(int newStateNum);
 	void setEdges(Edges newEdges);
 	void setNumCycles(int newNumCycles);
 	void setOperation(string op);
