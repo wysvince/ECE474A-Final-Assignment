@@ -216,10 +216,10 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	file << "\t\t\t\tif (Start == 1'b1) begin" << endl;								// If statement for Wait State, if (start == 1) Begin... 
 	file << "\t\t\t\t\tstate <= s1" << endl;										// Set next state to be first node.
 	file << "\t\t\t\tend" << endl;													// End the if.
-	file << "\t\t\tend" << endl;													// End the state:
+	file << "\t\t\tend\n" << endl;													// End the state:
 
-	// Define Scheduled State Cases:
-	file << "\n\n\t\t\t// Define scheduled state cases here....\n\n" << endl;
+	// Schedule the States:
+	writeStates(file, nodes, numTimes);												// Reads in file, nodes vector, and the amount of time states we have, then writes all the time states.
 
 	// Define Final State:
 	file << "\t\t\tFinal : begin" << endl;											// Begin Final State.
@@ -254,8 +254,109 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 }
 
 
-void WriteOutputFile::wirteStates(ofstream & file, Graph graph) {
+void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int numTimes) {
+	int tempNum = 1;				// Saves the Time stamp, start at T1
+	vector <Nodes> tempNodes;		// Saves all nodes exicuting at current time stamp.
+	vector <Edges> tempEdges;		// Saves the node's edge vector.
+	Edges ifEdge;
+	Edges elseEdge;
+	string tempCond;
+	int ifState;
+	int elseState;
+	bool hasElse = false;
 
+	while (tempNum <= numTimes) {
+		// Loop through the nodes vector to find nodes that should exicute in this time stamp.
+		for (vector<Nodes>::size_type nd = 0; nd < nodes.size(); nd++) {
+			// Check if current node exicutes in this time stamp
+			if (nodes.at(nd).getListR() == tempNum) {
+				tempNodes.push_back(nodes.at(nd)); // add it to our exicute vector.
+				tempEdges = nodes.at(nd).getEdges();
+				for (vector<Edges>::size_type eg = 0; eg < tempEdges.size(); eg++) {
+					if (!(tempEdges.at(eg).getConditionalOperation().empty())) {
+						if (tempEdges.at(eg).getConditionalOperation().find("else") != string::npos) {
+							elseEdge = tempEdges.at(eg);
+							hasElse = true;
+						}
+						else {
+							ifEdge = tempEdges.at(eg);
+						}
+					}
+				}
+			}
+		}
+
+		file << "\t\t\ts" << tempNum << " : begin" << endl;						// Start the state.
+		
+		// Add operations:
+		for (vector<Nodes>::size_type ind = 0; ind < tempNodes.size(); ind++) {
+			file << "\t\t\t\t" << tempNodes.at(ind).getOperation() << endl;		// Write the node's operation.
+		}
+
+		// Find the condition from condEdge.
+		tempCond = ifEdge.getConditionalOperation();
+
+		if (tempCond.find("{") != string::npos) {
+			tempCond = tempCond.substr(0, tempCond.find("{"));
+		}
+
+		// Check if we have reached the last time stamp.
+		if ((tempNum < numTimes) && tempCond.empty() == true) {
+			file << "\t\t\t\tstate <= s" << tempNum + 1 << endl;				// Write the next state.
+		}
+		else if (hasElse == true && tempCond.empty() == false) {				// Has a defined else.
+			// Find the next State.
+			ifState = nodes.at(ifEdge.getNextNode() - 1).getListR();
+			elseState = nodes.at(elseEdge.getNextNode() - 1).getListR();
+
+			// If state.
+			file << "\n\t\t\t\t" << tempCond << " begin" << endl;
+			file << "\t\t\t\t\tstate <= s" << ifState << endl;
+			file << "\t\t\t\tend" << endl;
+
+			// Else state.
+			file << "\t\t\t\telse begin" << endl;
+			file << "\t\t\t\t\tstate <= s" << elseState << endl;
+			file << "\t\t\t\tend" << endl;
+		}
+		else if (hasElse == false && tempCond.empty() == false) {				// Only has an if.
+			// Find the next State.
+			ifState = nodes.at(ifEdge.getNextNode() - 1).getListR();
+
+			// If state.
+			file << "\n\t\t\t\t" << tempCond << " begin" << endl;
+			file << "\t\t\t\t\tstate <= s" << ifState << endl;
+			file << "\t\t\t\tend" << endl;
+
+			// Else state.
+			file << "\t\t\t\telse begin" << endl;
+			if (ifState == tempNum + 1) {
+				file << "\t\t\t\t\tstate <= s" << tempNum + 2 << endl;
+			}
+			else {
+				file << "\t\t\t\t\tstate <= s" << tempNum + 1 << endl;
+			}
+			file << "\t\t\t\tend" << endl;
+		}
+		else {
+			file << "\t\t\t\tstate <= Final" << endl;							// At the last time so go to Final state.
+		}
+
+		file << "\t\t\tend\n" << endl;											// End the state.
+
+		// Clear tempNodes for next time stamp.
+		tempNodes.clear();
+		// Clear tempEdges for next time stamp.
+		tempEdges.clear();
+		// Initialize the temp edges.
+		ifEdge.init();
+		elseEdge.init();
+		// Initialize the temp condition and hasElse.
+		tempCond = "";
+		hasElse = false;
+
+		tempNum++;								// Increment the time.
+	}
 }
 
 // Determines the number of bits we need for our states.

@@ -96,6 +96,7 @@ int main(int argc, char* argv[]) {
 	tempNode.setListR(1);
 	tempEdge.setPrevNode(0);
 	tempEdge.setNextNode(2);
+	tempEdge.setCondtionalOperation("if ( d ) {");
 	tempNode.addEdge(tempEdge);
 	graph.addNode(tempNode);
 
