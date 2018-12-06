@@ -274,7 +274,7 @@ void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int num
 				tempEdges = nodes.at(nd).getEdges();
 				for (vector<Edges>::size_type eg = 0; eg < tempEdges.size(); eg++) {
 					if (!(tempEdges.at(eg).getConditionalOperation().empty())) {
-						if (tempEdges.at(eg).getConditionalOperation().find("else")) {
+						if (tempEdges.at(eg).getConditionalOperation().find("else") != string::npos) {
 							elseEdge = tempEdges.at(eg);
 							hasElse = true;
 						}
@@ -296,15 +296,18 @@ void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int num
 		// Find the condition from condEdge.
 		tempCond = ifEdge.getConditionalOperation();
 
+		if (tempCond.find("{") != string::npos) {
+			tempCond = tempCond.substr(0, tempCond.find("{"));
+		}
+
 		// Check if we have reached the last time stamp.
-		if (!(tempCond.empty()) && hasElse == true) {							// Has a defined else
+		if ((tempNum < numTimes) && tempCond.empty() == true) {
+			file << "\t\t\t\tstate <= s" << tempNum + 1 << endl;				// Write the next state.
+		}
+		else if (hasElse == true && tempCond.empty() == false) {				// Has a defined else.
 			// Find the next State.
 			ifState = nodes.at(ifEdge.getNextNode() - 1).getListR();
 			elseState = nodes.at(elseEdge.getNextNode() - 1).getListR();
-
-			if (tempCond.find("{")) {
-				tempCond.substr(0, tempCond.find("{"));
-			}
 
 			// If state.
 			file << "\n\t\t\t\t" << tempCond << " begin" << endl;
@@ -316,12 +319,12 @@ void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int num
 			file << "\t\t\t\t\tstate <= s" << elseState << endl;
 			file << "\t\t\t\tend" << endl;
 		}
-		else if (!(tempCond.empty()) && hasElse == false) {						// Keep the check for hasElse for clarity.
+		else if (hasElse == false && tempCond.empty() == false) {				// Only has an if.
 			// Find the next State.
 			ifState = nodes.at(ifEdge.getNextNode() - 1).getListR();
 
 			// If state.
-			file << "\n\t\t\t\tif( " << tempCond << " ) begin" << endl;
+			file << "\n\t\t\t\t" << tempCond << " begin" << endl;
 			file << "\t\t\t\t\tstate <= s" << ifState << endl;
 			file << "\t\t\t\tend" << endl;
 
@@ -335,9 +338,6 @@ void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int num
 			}
 			file << "\t\t\t\tend" << endl;
 		}
-		else if (tempNum < numTimes) {
-			file << "\t\t\t\tstate <= s" << tempNum + 1 << endl;				// Write the next state.
-		}
 		else {
 			file << "\t\t\t\tstate <= Final" << endl;							// At the last time so go to Final state.
 		}
@@ -348,8 +348,10 @@ void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int num
 		tempNodes.clear();
 		// Clear tempEdges for next time stamp.
 		tempEdges.clear();
+		// Initialize the temp edges.
 		ifEdge.init();
 		elseEdge.init();
+		// Initialize the temp condition and hasElse.
 		tempCond = "";
 		hasElse = false;
 
