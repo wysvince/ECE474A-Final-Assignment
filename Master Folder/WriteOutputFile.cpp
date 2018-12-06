@@ -180,18 +180,25 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	weight = graph.getWeight();
 
 	int numBits;
+	int numTimes = 0;
+
+	for (vector<Nodes>::size_type k = 0; k < nodes.size(); k++) {
+		if (nodes.at(k).getListR() > numTimes) {
+			numTimes = nodes.at(k).getListR();
+		}
+	}
 
 	// Find the number of bits.
-	numBits = this->findNumBits(nodes.size()) + 2; //  total number of states + 2 for wait and final.
+	numBits = this->findNumBits(numTimes + 2); //  total number of states (based on how many different time sections we have) + 2 for wait and final.
 	
 	// Write State machine.
 	// Write States:
 	file << "\treg [" << numBits - 1 << ", 0] state;\n" << endl; // total number of states -1 because we're assigning it's binary value.
 	file << "\treg [" << numBits - 1 << ", 0] Wait = " << numBits << "'d0;" << endl;
-	for (vector<Nodes>::size_type ind = 0; ind < nodes.size(); ind++) {
+	for (int ind = 0; ind < numTimes; ind++) {
 		file << "\treg [" << numBits - 1 << ", 0] s" << ind + 1  << " = " << numBits << "'d" << ind + 1  << ";"<< endl; // + 1 because we're starting at the second point in the binary number.
 	}
-	file << "\treg [" << numBits - 1 << ", 0] Final = " << numBits << "'d" << nodes.size() + 1 << ";\n" << endl;
+	file << "\treg [" << numBits - 1 << ", 0] Final = " << numBits << "'d" << numTimes + 1 << ";\n" << endl;
 
 	// Start always @ (posedge Clk):
 	file << "\talways @ (posedge Clk) begin : FSM" << endl;
