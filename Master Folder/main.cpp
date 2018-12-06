@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
 	tempNode.setListR(1);
 	tempEdge.setPrevNode(0);
 	tempEdge.setNextNode(2);
-	tempEdge.setCondtionalOperation("d");
+	tempEdge.setCondtionalOperation("if ( d ) {");
 	tempNode.addEdge(tempEdge);
 	graph.addNode(tempNode);
 
@@ -111,7 +111,6 @@ int main(int argc, char* argv[]) {
 	tempNode.setListR(2);
 	tempEdge.setPrevNode(1);
 	tempEdge.setNextNode(2);
-	tempEdge.setCondtionalOperation(" ");
 	tempNode.addEdge(tempEdge);
 	graph.addNode(tempNode);
 
@@ -126,7 +125,6 @@ int main(int argc, char* argv[]) {
 	tempNode.setListR(3);
 	tempEdge.setPrevNode(2);
 	tempEdge.setNextNode(3);
-	tempEdge.setCondtionalOperation(" ");
 	tempNode.addEdge(tempEdge);
 	graph.addNode(tempNode);
 
@@ -140,7 +138,6 @@ int main(int argc, char* argv[]) {
 	tempNode.setASAP(3);
 	tempNode.setListR(4);
 	tempEdge.setPrevNode(3);
-	tempEdge.setCondtionalOperation(" ");
 	tempNode.addEdge(tempEdge);
 	graph.addNode(tempNode);
 
@@ -155,7 +152,6 @@ int main(int argc, char* argv[]) {
 	tempNode.setListR(1);
 	tempEdge.setPrevNode(4);
 	tempEdge.setNextNode(5);
-	tempEdge.setCondtionalOperation(" ");
 	tempNode.addEdge(tempEdge);
 	graph.addNode(tempNode);
 
@@ -169,7 +165,6 @@ int main(int argc, char* argv[]) {
 	tempNode.setASAP(2);
 	tempNode.setListR(3);
 	tempEdge.setPrevNode(5);
-	tempEdge.setCondtionalOperation(" ");
 	tempNode.addEdge(tempEdge);
 	graph.addNode(tempNode);
 

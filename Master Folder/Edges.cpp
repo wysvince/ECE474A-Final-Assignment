@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Edges::Edges() { this->conditionalOperation = " "; } // default constructor
+Edges::Edges() {} // default constructor
 
 Edges::Edges(string condOp, int newPrevNode, int newNextNode) {
 	this->conditionalOperation = condOp;
