@@ -67,6 +67,7 @@ int main(int argc, char* argv[]) {
 		cout << "Fetching operations completed" << endl;					// DEBUGGING (Remove this)
 		inputFilename.close();
 		inputFilename.open(argv[1]);
+
 		read.handleOperations(inputFilename, &graph);
 
 		// fetching statements from input file

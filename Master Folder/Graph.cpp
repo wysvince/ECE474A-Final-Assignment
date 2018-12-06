@@ -152,12 +152,14 @@ void Graph::createALAPSchedule(int latency){
 	Nodes tempNode;						// Temporary node to save nodes if needed.
 	int size = this->nodes.size();		// Size of the nodes vector
 
+
 	int curALAP;						// Current ALAP value.
 
 	// Indicies variables.
 	vector <int> indicies;				// Holds all indicies of our current path.
 	int index = 0;						// Index of current node in nodes vector.
 	int endOfPath = 0;					// Last index in the path, will keep setting it until -1 to find the full path. 
+
 
 	// Cycle variables.
 	int lat = latency;					// Saves the current latency. (set to max latency at start)
