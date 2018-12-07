@@ -38,7 +38,7 @@ public:
 	unsigned int getNumNodes();
 
 	//methods
-	void addNode(Nodes newNode, string edgeCondition, int ifStatementLevel);
+	void addNode(Nodes newNode, int ifStatementLevel, vector<string> conditionVariables);
 	
 
 	// void generateALAPTimeTable(); // unsure where to place this yet

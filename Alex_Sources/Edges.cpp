@@ -6,7 +6,7 @@ using namespace std;
 
 Edges::Edges() {} // default constructor
 
-Edges::Edges(string condOp, Nodes* newPrevNode, Nodes* newNextNode) {
+Edges::Edges(string condOp, int newPrevNode, int newNextNode) {
 	this->conditionalOperation = condOp;
 	this->prevNode = newPrevNode;
 	this->nextNode = newNextNode;
@@ -17,11 +17,11 @@ void Edges::setCondtionalOperation(string condOp) {
 	this->conditionalOperation = condOp;
 }
 
-void Edges::setPrevNode(Nodes* newPrevNode) {
+void Edges::setPrevNode(int newPrevNode) {
 	this->prevNode = newPrevNode;
 }
 
-void Edges::setNextNode(Nodes* newNextNode) {
+void Edges::setNextNode(int newNextNode) {
 	this->nextNode = newNextNode;
 }
 
@@ -30,16 +30,19 @@ string Edges::getConditionalOperation() {
 	return this->conditionalOperation;
 }
 
-Nodes* Edges::getPrevNode() {
+int Edges::getPrevNode() {
 	return this->prevNode;
 }
 
-Nodes* Edges::getNextNode() {
+int Edges::getNextNode() {
 	return this->nextNode;
 }
 
 //Methods
 void Edges::printEdge() {
 	//cout << "\tPrevious: Node-" << prevNode->getStateNum() << endl;
-	cout << "\tNext Node:     Node-" << nextNode->getStateNum() << endl;
+	cout << "\tNext Node:    Node " << nextNode << endl;
+	if (!conditionalOperation.empty()) {
+		cout << "\t    Condition:    " << conditionalOperation << endl;
+	}
 }
