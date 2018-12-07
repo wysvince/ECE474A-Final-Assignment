@@ -14,7 +14,7 @@ class Edges;
 class Nodes {
 
 private:
-	int stateNum;
+	int nodeNum;
 	vector<Edges> edges;
 	int numCycles;
 	string operation;
@@ -23,6 +23,7 @@ private:
 	int listRTime;
 	int slack;
 	int cycleCount;
+	bool checked;
 
 public:
 	// constructor
@@ -30,7 +31,7 @@ public:
 	Nodes(int newStateNum, Edges newEdges, int newNumCycles, string op);
 
 	//setters
-	void setStateNum(int newStateNum);
+	void setNodeNum(int newStateNum);
 	void setEdges(Edges newEdges);
 	void setNumCycles(int newNumCycles);
 	void setOperation(string op);
@@ -40,9 +41,10 @@ public:
 	void setALAP(int time);
 	void setListR(int time);
 	void init();
+	void setChecked(bool);
 
 	//getters
-	int getStateNum();
+	int getNodeNum();
 	vector<Edges> getEdges();
 	int getNumCycles();
 	string getOperation();
@@ -51,10 +53,11 @@ public:
 	int getALAP();
 	int getASAP();
 	int getListR();
+	int getChecked();
 
 	//Methods
 	void addEdge(Edges newEdge);
-	void calculateSlack(int alapTime, int currCycle);
+	int calculateSlack(int alapTime, int currCycle);
 
 };
 

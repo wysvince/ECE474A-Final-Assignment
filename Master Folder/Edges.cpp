@@ -4,7 +4,11 @@
 
 using namespace std;
 
-Edges::Edges() {} // default constructor
+Edges::Edges() {
+	this->conditionalOperation = "";
+	this->prevNode = -1;
+	this->nextNode = -1;
+} // default constructor
 
 Edges::Edges(string condOp, int newPrevNode, int newNextNode) {
 	this->conditionalOperation = condOp;

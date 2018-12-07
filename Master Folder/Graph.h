@@ -18,14 +18,14 @@ class Graph {
 
 private:
 	vector<Nodes> nodes;
-	//vector<Edges> edges;
+	vector<Edges> edges;
 	int weight;
 	vector<int> alapSchedule;
 
 	// List R Scheduling:
-	vector<Nodes> listRSchedule;
-	vector<Nodes> U; // candidate operations (Node's index)
-	vector<Nodes> S; // scheduled nodes
+	vector<int> listRSchedule;
+	vector<int> U; // candidate operations (Node's index)
+	vector<int> S; // scheduled nodes
 
 public:
 	// constructors
@@ -35,28 +35,32 @@ public:
 
 	//setters
 	void setNodes(Nodes newNodes);
+	void setEdge(Edges newEdges);
 	void setWeight(int newWeight);
 	void setAlapSchedule(int num);
-	void setListRSchedule(Nodes node);
+	void setListRSchedule(int node);
 
 	//getters
 	vector<Nodes> getNodes();
+	vector<Edges> getEdges();
 	int getWeight();
 	vector<int> getAlapSchedule();
-	vector<Nodes> getListRSchedule();
+	vector<int> getListRSchedule();
 
 	//methods
 	// void generateALAPTimeTable(); // unsure where to place this yet
 	// void generateList_RSchedule(); // unsure where to plae this yet
 	//void calculateWeights(Operations &op);
 	void createListRSchedule(int latency);
-	void updateU(Nodes node);
-	void updateS();
-	bool checkConstraint(Nodes node);
+	Nodes findLowestSlack(int);
 	void createUnscheduledList();
 	void createALAPSchedule(int latency);
 	void addNode(Nodes newNode);
-	void Schedule();
+	void addEdges(Edges newEdge);
+	Nodes returnNode(int num);
+	int returnNodeIndex(int num);
+	int countResource();
+	bool foundDependency(int);
 };
 
 #endif // !GRAPH_H
