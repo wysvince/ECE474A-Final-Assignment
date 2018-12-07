@@ -93,9 +93,11 @@ int main(int argc, char* argv[]) {
 	tempNode.setOperation("d = a + b");
 	tempNode.setNumCycles(1);
 	tempNode.setASAP(1);
-	tempNode.setListR(1);
-	tempEdge.setPrevNode(0);
-	tempEdge.setNextNode(2);
+	//tempNode.setListR(1);
+	tempNode.setNodeNum(1);
+	tempEdge.setPrevNode(1);
+	tempEdge.setNextNode(3);
+	tempEdge.setCondtionalOperation("if ( d ) {");
 	tempNode.addEdge(tempEdge);
 	graph.addNode(tempNode);
 
@@ -107,9 +109,10 @@ int main(int argc, char* argv[]) {
 	tempNode.setOperation("e = a + c");
 	tempNode.setNumCycles(1);
 	tempNode.setASAP(1);
-	tempNode.setListR(2);
-	tempEdge.setPrevNode(1);
-	tempEdge.setNextNode(2);
+	//tempNode.setListR(2);
+	tempNode.setNodeNum(2);
+	tempEdge.setPrevNode(-1);
+	tempEdge.setNextNode(3);
 	tempNode.addEdge(tempEdge);
 	graph.addNode(tempNode);
 
@@ -121,9 +124,10 @@ int main(int argc, char* argv[]) {
 	tempNode.setOperation("g = d > e");
 	tempNode.setNumCycles(1);
 	tempNode.setASAP(2);
-	tempNode.setListR(3);
-	tempEdge.setPrevNode(2);
-	tempEdge.setNextNode(3);
+	//tempNode.setListR(3);
+	tempNode.setNodeNum(3);
+	tempEdge.setPrevNode(1);
+	tempEdge.setNextNode(4);
 	tempNode.addEdge(tempEdge);
 	graph.addNode(tempNode);
 
@@ -135,7 +139,8 @@ int main(int argc, char* argv[]) {
 	tempNode.setOperation("z = g ? d : e");
 	tempNode.setNumCycles(1);
 	tempNode.setASAP(3);
-	tempNode.setListR(4);
+	//tempNode.setListR(4);
+	tempNode.setNodeNum(4);
 	tempEdge.setPrevNode(3);
 	tempNode.addEdge(tempEdge);
 	graph.addNode(tempNode);
@@ -148,7 +153,8 @@ int main(int argc, char* argv[]) {
 	tempNode.setOperation("f = a * c");
 	tempNode.setNumCycles(2);
 	tempNode.setASAP(1);
-	tempNode.setListR(1);
+	//tempNode.setListR(1);
+	tempNode.setNodeNum(5);
 	tempEdge.setPrevNode(4);
 	tempEdge.setNextNode(5);
 	tempNode.addEdge(tempEdge);
@@ -162,13 +168,55 @@ int main(int argc, char* argv[]) {
 	tempNode.setOperation("x = f - d");
 	tempNode.setNumCycles(1);
 	tempNode.setASAP(2);
-	tempNode.setListR(3);
+	//tempNode.setListR(3);
+	tempNode.setNodeNum(6);
 	tempEdge.setPrevNode(5);
 	tempNode.addEdge(tempEdge);
 	graph.addNode(tempNode);
 
 	// Init nodes.
 	tempNode.init();
+	tempEdge.init();
+
+	// Adding list of edges to Graph
+	tempEdge.setPrevNode(-1);
+	tempEdge.setNextNode(1);
+	graph.addEdges(tempEdge);
+	tempEdge.init();
+	tempEdge.setPrevNode(-1);
+	tempEdge.setNextNode(2);
+	graph.addEdges(tempEdge);
+	tempEdge.init();
+	tempEdge.setPrevNode(-1);
+	tempEdge.setNextNode(5);
+	graph.addEdges(tempEdge);
+	tempEdge.init();
+	tempEdge.setPrevNode(1);
+	tempEdge.setNextNode(6);
+	graph.addEdges(tempEdge);
+	tempEdge.init();
+	tempEdge.setPrevNode(1);
+	tempEdge.setNextNode(3);
+	graph.addEdges(tempEdge);
+	tempEdge.init();
+	tempEdge.setPrevNode(2);
+	tempEdge.setNextNode(3);
+	graph.addEdges(tempEdge);
+	tempEdge.init();
+	tempEdge.setPrevNode(3);
+	tempEdge.setNextNode(4);
+	graph.addEdges(tempEdge);
+	tempEdge.init();
+	tempEdge.setPrevNode(5);
+	tempEdge.setNextNode(6);
+	graph.addEdges(tempEdge);
+	tempEdge.init();
+	tempEdge.setPrevNode(6);
+	tempEdge.setNextNode(-1);
+	graph.addEdges(tempEdge);
+	tempEdge.init();
+	tempEdge.setPrevNode(4);
+	tempEdge.setNextNode(-1);
 	tempEdge.init();
 
 	cout << "Graph Written" << endl;

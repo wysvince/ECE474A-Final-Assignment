@@ -9,6 +9,7 @@ Nodes::Nodes() {
 	this->listRTime = -1;
 	this->slack = 0;
 	this->cycleCount = 0;
+	this->checked = false;
 	
 } // default constructor
 
@@ -43,7 +44,7 @@ void Nodes::setSlack(int num)
 
 void Nodes::setCycleCount(int num)
 {
-	this->cycleCount += num;
+	this->cycleCount = cycleCount + num;
 }
 
 void Nodes::setASAP(int time) {
@@ -69,7 +70,12 @@ void Nodes::init() {
 	this->asapTime	 = -1;
 	this->listRTime	 = -1;
 	this->slack		 = 0;
-	this->cycleCount = 0;
+	this->cycleCount = -1;
+}
+
+void Nodes::setChecked(bool flag)
+{
+	this->checked = flag;
 }
 
 // getters
@@ -109,6 +115,11 @@ int Nodes::getASAP() {
 
 int Nodes::getListR() {
 	return this->listRTime;
+}
+
+int Nodes::getChecked()
+{
+	return this->checked;
 }
 
 //Methods

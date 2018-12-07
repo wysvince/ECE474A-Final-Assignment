@@ -23,6 +23,7 @@ private:
 	int listRTime;
 	int slack;
 	int cycleCount;
+	bool checked;
 
 public:
 	// constructor
@@ -40,6 +41,7 @@ public:
 	void setALAP(int time);
 	void setListR(int time);
 	void init();
+	void setChecked(bool);
 
 	//getters
 	int getNodeNum();
@@ -51,6 +53,7 @@ public:
 	int getALAP();
 	int getASAP();
 	int getListR();
+	int getChecked();
 
 	//Methods
 	void addEdge(Edges newEdge);
