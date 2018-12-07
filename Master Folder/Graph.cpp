@@ -88,17 +88,7 @@ void Graph::createListRSchedule(int latency)
 	int currASAP;
 	int count = 0;
 	for (int cycle = 1; cycle < (latency + 1); cycle++) {
-		// checks if all nodes has been checked
-		count = 0;
-		for (Nodes n : nodes) {
-			if (n.getChecked() == true) {
-				count++;
-			}
-		}
-		if (count == nodes.size()) {
-			break;
-		}
-
+		
 		cout << endl << "Time Cycle: " << cycle << endl << endl;
 		tempSlack = 999;
 		// set slack time for current cycle for the remaining nodes
@@ -272,15 +262,26 @@ void Graph::createListRSchedule(int latency)
 			cout << "Node: " << nodes.at(i).getNodeNum() << "\tCycle count: " << nodes.at(i).getCycleCount() << endl;
 		}
 		cout << endl;
-			
+		
+		// checks if all nodes has been visited and listR has been set
+		int count = 0;
+		for (Nodes n : nodes) {
+			if (n.getListR() != -1) {
+				count++;
+			}
+		}
+		if (count == nodes.size()) {
+			break;
+		}
+
 	} // end: for loop (cycle)
 
-	cout << "List_R List: " << endl;
-	for (unsigned int i = 0; i < nodes.size(); i++) {
+		cout << "List_R List: " << endl;
+		for (unsigned int i = 0; i < nodes.size(); i++) {
 		cout << "Node: " << nodes.at(i).getNodeNum() << "\tListR time = " << nodes.at(i).getListR() << endl;
 	}
 		cout << endl;
-}
+}//gitpush _ 12/6 8:11PM
 
 bool Graph::foundDependency(int nodeNum) {
 	bool flag = false;
