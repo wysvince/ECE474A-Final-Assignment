@@ -242,8 +242,9 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 
 	// Testing --------------------------------------------
 	file << "\n\n// Just For testing will remove later:" << endl;
-	file << "Graph: \n" << "Weight: " << weight << "\n";
+	file << "Graph: \n" << "Weight: " << weight << endl;
 	for (vector<Nodes>::size_type i = 0; i < nodes.size(); i++) {
+		file << "Node: " << i + 1 << endl;
 		file << "Operation: " << nodes.at(i).getOperation() << endl;
 		file << "ALAP Time: " << nodes.at(i).getALAP() << endl;
 		file << "ASAP Time: " << nodes.at(i).getASAP() << endl;

@@ -206,17 +206,26 @@ void Graph::createALAPSchedule(int latency){
 			// Find index.
 			index = indicies.at(k);
 			numCycles = this->nodes.at(index).getNumCycles();	// Find number of cycles.
-			if (numCycles == 2) {
+
+			if (numCycles > 2) {
+				lat = lat - 2;
+			}
+			else if (numCycles > 1) {
 				lat = lat - 1;
 			}
-			else if (numCycles == 3) {
-				lat = lat = 2;
-			}
+			
 			if (this->nodes.at(index).getALAP() < 0) {
 				// How we schedule.
 				this->nodes.at(index).setALAP(lat);					// Set ALAP to be the current lat value.
 				numSchedNode++;										// Increment the number of scheduled nodes.
 			}
+			else if (this->nodes.at(index).getALAP() < lat) {
+				// How we schedule.
+				this->nodes.at(index).setALAP(lat);					// Set ALAP to be the current lat value.
+				numSchedNode++;										// Increment the number of scheduled nodes.
+			}
+			
+
 			lat = lat - 1;								// Set latency based on node.
 		}
 

@@ -14,6 +14,11 @@
 #include <string>
 using namespace std;
 
+void setError(Nodes tempNode, Edges tempEdge, Graph & graph);
+void setHLS8(Nodes tempNode, Edges tempEdge, Graph & graph);
+void setIf3(Nodes tempNode, Edges tempEdge, Graph & graph);
+void setLatHLS4(Nodes tempNode, Edges tempEdge, Graph & graph);
+
 
 //////// F U N C T I O N   M A I N ////////////////////////////
 int main(int argc, char* argv[]) {
@@ -83,6 +88,64 @@ int main(int argc, char* argv[]) {
 	// Testing Graph Class -------------------------------
 	cout << "Start Writing Graph" << endl;
 
+	//setError(tempNode, tempEdge, graph);
+	setHLS8(tempNode, tempEdge, graph);
+
+	cout << "Graph Written" << endl;
+	// End of Test graph writting.
+
+	cout << "Start ALAP" << endl;
+	graph.createALAPSchedule(7);
+	cout << "End ALAP" << endl;
+	// ----------------------------------------------------
+	// Done: Generate graph
+	// Generate ALAP Schedule
+	//int latency = std::stoi(argv[2]);
+	//graph.createALAPSchedule(latency);
+	// Generate List_R Schedule
+	//graph.createListRSchedule(latency);
+
+//////////// Generate states //////////////////////////////////////////////////////////////////////////////////////////
+
+	// Done: Generate states
+
+//////////// Generate output file ////////////////////////////////////////////////////////////////////////////////////
+	outputFilename.open(argv[3]);
+	if (outputFilename.is_open()) {
+		/* Not working for mine so commented for now.
+		cout << "Opened file for write" << endl;							// DEBUGGING (Remove this)
+		// writing to output file
+		write.createHLSMHeader(outputFilename);
+		cout << "Wrote HLSM Header" << endl;								// DEBUGGING (Remove this)
+		write.writeDatatypeInstantiation(outputFilename, read);
+		cout << "Wrote Datatype Instantiations" << endl;					// DEBUGGING (Remove this)
+		write.writeOperations(outputFilename, read);
+		cout << "Wrote Operations" << endl;									// DEBUGGING (Remove this)
+		*/
+
+		// DEBUG ONLY ----------------------------------
+		cout << "\n\n\n";
+		write.createHLSMHeader(outputFilename);
+		write.writeGraph(outputFilename, graph);
+		// DEBUG ONLY ----------------------------------
+
+		// close output file
+		outputFilename.close();
+		cout << "File closed" << endl;										// DEBUGGING (Remove this)
+	}
+	else {	// Error!!
+		cout << "Error: Output file doesn't exists." << endl;				// DEBUGGING (Remove this)
+		return -1;
+	}// Done: Generate output file 
+
+	cout << "Reached the end of main" << endl;								// DEBUGGING (Remove this)
+	return 0;
+}// end of main function
+
+// Adding some test functions to make testing a little easier...
+
+void setError(Nodes tempNode, Edges tempEdge, Graph & graph) {
+
 	// Init nodes.
 	tempNode.init();
 	tempEdge.init();
@@ -109,9 +172,15 @@ int main(int argc, char* argv[]) {
 	tempNode.setNumCycles(1);
 	tempNode.setASAP(1);
 	tempNode.setListR(2);
-	tempEdge.setPrevNode(1);
+	tempEdge.setPrevNode(1);				// Edge 1
 	tempEdge.setNextNode(2);
 	tempNode.addEdge(tempEdge);
+
+	tempEdge.init();
+	tempEdge.setPrevNode(1);				// Edge 2
+	tempEdge.setNextNode(5);
+	tempNode.addEdge(tempEdge);
+
 	graph.addNode(tempNode);
 
 	// Init nodes.
@@ -171,54 +240,220 @@ int main(int argc, char* argv[]) {
 	// Init nodes.
 	tempNode.init();
 	tempEdge.init();
+}
 
-	cout << "Graph Written" << endl;
-	// End of Test graph writting.
+void setHLS8(Nodes tempNode, Edges tempEdge, Graph & graph) {
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
 
-	cout << "Start ALAP" << endl;
-	graph.createALAPSchedule(7);
-	cout << "End ALAP" << endl;
-	// ----------------------------------------------------
-	// Done: Generate graph
-	// Generate ALAP Schedule
-	//int latency = std::stoi(argv[2]);
-	//graph.createALAPSchedule(latency);
-	// Generate List_R Schedule
-	//graph.createListRSchedule(latency);
+	// Test graph of "error1.c":
 
-//////////// Generate states //////////////////////////////////////////////////////////////////////////////////////////
+	// Node 1
+	tempNode.setOperation("t1 = x0 + x1");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(1);
+	tempNode.setListR(3);
+	tempEdge.setPrevNode(0);				// Edge 1
+	tempEdge.setNextNode(2);
+	tempNode.addEdge(tempEdge);
 
-	// Done: Generate states
+	tempEdge.init();
+	tempEdge.setPrevNode(1);				// Edge 2
+	tempEdge.setNextNode(5);
+	tempNode.addEdge(tempEdge);
 
-//////////// Generate output file ////////////////////////////////////////////////////////////////////////////////////
-	outputFilename.open(argv[3]);
-	if (outputFilename.is_open()) {
-		/* Not working for mine so commented for now.
-		cout << "Opened file for write" << endl;							// DEBUGGING (Remove this)
-		// writing to output file
-		write.createHLSMHeader(outputFilename);
-		cout << "Wrote HLSM Header" << endl;								// DEBUGGING (Remove this)
-		write.writeDatatypeInstantiation(outputFilename, read);
-		cout << "Wrote Datatype Instantiations" << endl;					// DEBUGGING (Remove this)
-		write.writeOperations(outputFilename, read);
-		cout << "Wrote Operations" << endl;									// DEBUGGING (Remove this)
-		*/
+	graph.addNode(tempNode);
 
-		// DEBUG ONLY ----------------------------------
-		cout << "\n\n\n";
-		write.createHLSMHeader(outputFilename);
-		write.writeGraph(outputFilename, graph);
-		// DEBUG ONLY ----------------------------------
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
 
-		// close output file
-		outputFilename.close();
-		cout << "File closed" << endl;										// DEBUGGING (Remove this)
-	}
-	else {	// Error!!
-		cout << "Error: Output file doesn't exists." << endl;				// DEBUGGING (Remove this)
-		return -1;
-	}// Done: Generate output file 
+	// Node 2
+	tempNode.setOperation("d1 = t1 + c0");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(2);
+	tempNode.setListR(6);
+	tempEdge.setPrevNode(1);
+	tempEdge.setNextNode(-1);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
 
-	cout << "Reached the end of main" << endl;								// DEBUGGING (Remove this)
-	return 0;
-}// end of main function
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 3
+	tempNode.setOperation("vd1 = t1 * c0");
+	tempNode.setNumCycles(2);
+	tempNode.setASAP(2);
+	tempNode.setListR(4);
+	tempEdge.setPrevNode(2);
+	tempEdge.setNextNode(3);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 4
+	tempNode.setOperation("d2 = vd1 * five");
+	tempNode.setNumCycles(2);
+	tempNode.setASAP(3);
+	tempNode.setListR(6);
+	tempEdge.setPrevNode(3);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 5
+	tempNode.setOperation("t2 = x1 + x2");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(1);
+	tempNode.setListR(1);
+	tempEdge.setPrevNode(4);				// Edge 1
+	tempEdge.setNextNode(7);
+	tempNode.addEdge(tempEdge);
+
+	tempEdge.init();
+	tempEdge.setPrevNode(4);				// Edge 2
+	tempEdge.setNextNode(6);
+	tempNode.addEdge(tempEdge);
+
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 6
+	tempNode.setOperation("t3 = x3 + c0");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(1);
+	tempNode.setListR(2);
+	tempEdge.setPrevNode(5);				// Edge 1
+	tempEdge.setNextNode(7);
+	tempNode.addEdge(tempEdge);
+
+	tempEdge.init();
+	tempEdge.setPrevNode(5);				// Edge 2
+	tempEdge.setNextNode(6);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 7
+	tempNode.setOperation("e = t2 * t3");
+	tempNode.setNumCycles(2);
+	tempNode.setASAP(2);
+	tempNode.setListR(6);
+	tempEdge.setPrevNode(6);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 8
+	tempNode.setOperation("ve = t2 * t3");
+	tempNode.setNumCycles(2);
+	tempNode.setASAP(2);
+	tempNode.setListR(3);
+
+	tempEdge.setPrevNode(7);				// Edge 1
+	tempEdge.setNextNode(9);
+	tempNode.addEdge(tempEdge);
+
+	tempEdge.init();
+	tempEdge.setPrevNode(7);				// Edge 2
+	tempEdge.setNextNode(8);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 9
+	tempNode.setOperation("f = ve * y0");
+	tempNode.setNumCycles(2);
+	tempNode.setASAP(3);
+	tempNode.setListR(6);
+	tempEdge.setPrevNode(8);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 10
+	tempNode.setOperation("vf = v3 * y0");
+	tempNode.setNumCycles(2);
+	tempNode.setASAP(3);
+	tempNode.setListR(5);
+	tempEdge.setPrevNode(9);
+	tempEdge.setNextNode(12);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 11
+	tempNode.setOperation("g = x0 - ten");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(1);
+	tempNode.setListR(5);
+	tempEdge.setPrevNode(10);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 12
+	tempNode.setOperation("vg = x0 - ten");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(1);
+	tempNode.setListR(4);
+	tempEdge.setPrevNode(11);
+	tempEdge.setNextNode(12);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 13
+	tempNode.setOperation("h = vf + vg");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(4);
+	tempNode.setListR(7);
+	tempEdge.setPrevNode(12);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+}
+
+void setIf3(Nodes tempNode, Edges tempEdge, Graph & graph) {
+
+}
+
+void setLatHLS4(Nodes tempNode, Edges tempEdge, Graph & graph) {
+
+}
