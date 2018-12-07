@@ -14,6 +14,14 @@
 #include <string>
 using namespace std;
 
+// Testing Functions -------------------------------------------------------
+// The Init of functions.
+void setError(Nodes tempNode, Edges tempEdge, Graph & graph);
+void setHLS8(Nodes tempNode, Edges tempEdge, Graph & graph);
+void setIf3(Nodes tempNode, Edges tempEdge, Graph & graph);
+void setLatHLS4(Nodes tempNode, Edges tempEdge, Graph & graph);
+// --------------------------------------------------------------------------
+
 //////// F U N C T I O N   M A I N ////////////////////////////
 int main(int argc, char* argv[]) {
 	
@@ -84,6 +92,7 @@ int main(int argc, char* argv[]) {
 
 	//setError(tempNode, tempEdge, graph);
 	//setHLS8(tempNode, tempEdge, graph);
+	setIf3(tempNode, tempEdge, graph);
 
 	cout << "Graph Written" << endl;
 	// End of Test graph writting.
@@ -135,8 +144,6 @@ int main(int argc, char* argv[]) {
 	cout << "Reached the end of main" << endl;								// DEBUGGING (Remove this)
 	return 0;
 }// end of main function
-<<<<<<< HEAD
-=======
 
 // Adding some test functions to make testing a little easier...
 
@@ -447,10 +454,235 @@ void setHLS8(Nodes tempNode, Edges tempEdge, Graph & graph) {
 }
 
 void setIf3(Nodes tempNode, Edges tempEdge, Graph & graph) {
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
 
+	// Test graph of "error1.c":
+
+	// Node 1
+	tempNode.setOperation("d = a + b");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(1);
+	tempNode.setListR(1);
+	tempEdge.setPrevNode(0);
+	tempEdge.setNextNode(4);
+	tempNode.addEdge(tempEdge);				// Edge 1
+
+	tempEdge.init();
+	tempEdge.setPrevNode(0);
+	tempEdge.setNextNode(8);
+	tempNode.addEdge(tempEdge);				// Edge 2
+
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 2
+	tempNode.setOperation("e = a + c");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(1);
+	tempNode.setListR(2);
+	tempEdge.setPrevNode(1);
+	tempEdge.setNextNode(3);
+	tempNode.addEdge(tempEdge);				// Edge 1
+
+	tempEdge.init();
+	tempEdge.setPrevNode(1);
+	tempEdge.setNextNode(4);
+	tempNode.addEdge(tempEdge);				// Edge 2
+
+	tempEdge.init();
+	tempEdge.setPrevNode(1);
+	tempEdge.setNextNode(6);
+	tempNode.addEdge(tempEdge);				// Edge 3
+
+	tempEdge.init();
+	tempEdge.setPrevNode(1);
+	tempEdge.setNextNode(9);
+	tempNode.addEdge(tempEdge);				// Edge 4
+
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 3
+	tempNode.setOperation("f = a - b");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(1);
+	tempNode.setListR(3);
+	tempEdge.setPrevNode(2);
+	tempEdge.setNextNode(7);
+	tempNode.addEdge(tempEdge);				// Edge 1
+
+	tempEdge.init();
+	tempEdge.setPrevNode(2);
+	tempEdge.setNextNode(9);
+	tempNode.addEdge(tempEdge);				// Edge 2
+
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 4
+	tempNode.setOperation("dEQe = d == e");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(2);
+	tempNode.setListR(3);
+	tempEdge.setPrevNode(3);
+	tempEdge.setNextNode(5);
+	tempNode.addEdge(tempEdge);				// Edge 1
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 5
+	tempNode.setOperation("dLTe = d > e");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(2);
+	tempNode.setListR(4);
+	tempEdge.setPrevNode(4);
+	tempEdge.setNextNode(5);
+	tempNode.addEdge(tempEdge);				// Edge 1
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 6
+	tempNode.setOperation("dLTEe = dEQe + dLTe");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(3);
+	tempNode.setListR(5);
+	tempEdge.setPrevNode(5);
+	tempEdge.setNextNode(6);
+	tempEdge.setCondtionalOperation("if ( dLTEe && dLTe ) {");
+	tempNode.addEdge(tempEdge);				// Edge 1
+
+	tempEdge.init();
+	tempEdge.setPrevNode(5);
+	tempEdge.setNextNode(7);
+	tempEdge.setCondtionalOperation("if ( dLTEe && dLTe ) {");
+	tempNode.addEdge(tempEdge);				// Edge 2
+
+	tempEdge.init();
+	tempEdge.setPrevNode(5);
+	tempEdge.setNextNode(8);
+	tempEdge.setCondtionalOperation("if ( dLTEe ) {");
+	tempNode.addEdge(tempEdge);				// Edge 3
+
+	tempEdge.init();
+	tempEdge.setPrevNode(5);
+	tempEdge.setNextNode(9);
+	tempEdge.setCondtionalOperation("if ( dLTEe ) {");
+	tempNode.addEdge(tempEdge);				// Edge 4
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 7
+	tempNode.setOperation("g = e + one");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(4);
+	tempNode.setListR(7);
+	tempEdge.setPrevNode(6);
+	tempNode.addEdge(tempEdge);				// Edge 1
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 8
+	tempNode.setOperation("h = f + one");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(4);
+	tempNode.setListR(6);
+	tempEdge.setPrevNode(7);				// Edge 1
+	tempEdge.setNextNode(10);
+	tempNode.addEdge(tempEdge);
+
+	tempEdge.init();
+	tempEdge.setPrevNode(7);				// Edge 2
+	tempEdge.setNextNode(11);
+	tempNode.addEdge(tempEdge);
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 9
+	tempNode.setOperation("g = d + e");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(5);
+	tempNode.setListR(7);
+	tempEdge.setPrevNode(8);
+	tempNode.addEdge(tempEdge);				// Edge 1
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 10
+	tempNode.setOperation("h = f + e");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(5);
+	tempNode.setListR(6);
+	tempEdge.setPrevNode(9);
+	tempEdge.setNextNode(10);
+	tempNode.addEdge(tempEdge);				// Edge 1
+
+	tempEdge.init();
+	tempEdge.setPrevNode(9);
+	tempEdge.setNextNode(11);
+	tempNode.addEdge(tempEdge);				// Edge 1
+
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 11
+	tempNode.setOperation("x = h << one");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(6);
+	tempNode.setListR(7);
+	tempEdge.setPrevNode(10);
+	tempNode.addEdge(tempEdge);				// Edge 1
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
+
+	// Node 12
+	tempNode.setOperation("z = h >> one");
+	tempNode.setNumCycles(1);
+	tempNode.setASAP(6);
+	tempNode.setListR(7);
+	tempEdge.setPrevNode(11);
+	tempNode.addEdge(tempEdge);				// Edge 1
+	graph.addNode(tempNode);
+
+	// Init nodes.
+	tempNode.init();
+	tempEdge.init();
 }
 
 void setLatHLS4(Nodes tempNode, Edges tempEdge, Graph & graph) {
 
 }
->>>>>>> parent of 54be277... In the middle of adding the if test case Dont use  setIf3 yet

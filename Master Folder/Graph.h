@@ -55,6 +55,7 @@ public:
 	bool checkConstraint(Nodes node);
 	void createUnscheduledList();
 	void createALAPSchedule(int latency);
+	void checkALAP(int latency);
 	void addNode(Nodes newNode);
 	void Schedule();
 };

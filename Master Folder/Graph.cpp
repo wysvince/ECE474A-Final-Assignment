@@ -159,7 +159,10 @@ void Graph::createALAPSchedule(int latency){
 	vector <int> indicies;				// Holds all indicies of our current path.
 	int index = 0;						// Index of current node in nodes vector.
 	int endOfPath = 0;					// Last index in the path, will keep setting it until -1 to find the full path. 
-
+	
+	// Number of iterated edges:
+	int numItEdge = 0;					// Increments when we find an edge to make sure we hit every edge in the graph, otherwise we have errors with our timing in specific situations.
+	int tempInd = 0;
 
 	// Cycle variables.
 	int lat = latency;					// Saves the current latency. (set to max latency at start)
@@ -185,20 +188,24 @@ void Graph::createALAPSchedule(int latency){
 		while (endOfPath >= 0) {
 			// Find the Edge
 			tempNode = this->nodes.at(endOfPath);
+			tempEdge.init();
 			// Iterate through the node's edge vector to find the next node and schedule the path.
 			for (vector<Edges>::size_type j = 0; j < tempNode.getEdges().size(); j++) {
 				tempEdge = tempNode.getEdges().at(j); // Set a temp edge for ease of reading and programming.
 				endOfPath = tempEdge.getNextNode();
-				if (endOfPath >= 0) {
-						// Found next part of our path.
-						indicies.push_back(endOfPath); // add it to our path vector.
-						j = tempNode.getEdges().size(); // set search index to exit parameter (size of the edge vector in our node). Basically, exit the loop.	
+				if ( endOfPath >= 0 ) {
+					// Found next part of our path.
+					indicies.push_back(endOfPath); // add it to our path vector.
+					j = tempNode.getEdges().size(); // set search index to exit parameter (size of the edge vector in our node). Basically, exit the loop.
 				}
 				else {
 					// End of path found.
 					j = tempNode.getEdges().size(); // set search index to exit parameter (size of the edge vector in our node). Basically, exit the loop.				
 				}
 			}
+
+			// Set it to 0 to make sure it triggers for each node.
+			numItEdge = 0;
 		}
 
 		// Now that we have path, we need to iterate through it backwards.
@@ -219,7 +226,7 @@ void Graph::createALAPSchedule(int latency){
 				this->nodes.at(index).setALAP(lat);					// Set ALAP to be the current lat value.
 				numSchedNode++;										// Increment the number of scheduled nodes.
 			}
-			else if (this->nodes.at(index).getALAP() < lat) {
+			else if (this->nodes.at(index).getALAP() > lat) {		// Check if the current ALAP value is larger than current lat value (found new dependency) and change it.
 				// How we schedule.
 				this->nodes.at(index).setALAP(lat);					// Set ALAP to be the current lat value.
 				numSchedNode++;										// Increment the number of scheduled nodes.
@@ -236,6 +243,91 @@ void Graph::createALAPSchedule(int latency){
 		indicies.clear();
 	}
 
+	// Check the ALAP before we exit
+	this->checkALAP(latency);
+
+}
+
+/* Goes through ALAP once to make sure no parent nodes are taking the same time slot as one of thier child nodes.
+ * Kind of like putting a bandaid on it but it would take to long to fix the createALAPSchedule( ... ) function.
+ */
+void Graph::checkALAP(int latency) {
+
+	// Graph variables.
+	Edges tempEdge;						// Temporary Edge.
+	Nodes tempNode;						// Temporary node to save nodes if needed.
+	int size = this->nodes.size();		// Size of the nodes vector
+
+	int curALAP;						// Current ALAP value.
+
+	// Indicies variables.
+	vector <int> indicies;				// Holds all indicies of our current path.
+	int index = 0;						// Index of current node in nodes vector.
+
+	// Number of iterated edges:
+	int numItEdge = 0;					// Increments when we find an edge to make sure we hit every edge in the graph, otherwise we have errors with our timing in specific situations.
+	int tempInd = 0;
+
+	// Cycle variables.
+	int nextNode;						// Saves the current latency. (set to max latency at start)
+	int numCycles = 0;					// Number of cycles current node uses.
+
+	// End condition.
+	int numSchedNode = 0;				// Total scheduled nodes (end condition for loop).
+
+	bool change = true;					// Checks if there was a change, if so loop through again. If we can loop through all nodes without change then there are no conflicts.
+	int currNodeALAP = 0;				// Saves the current node's ALAP value.
+	int nextNodeALAP = 0;				// Saves the next node's ALAP.
+
+	while (change == true) {
+		/* Find a node, look at it's edges and the nodes at the end. Compare the ALAP of each parent node to each child node. If there is a conflict push the parent node up.
+		 * Iterate through the nodes vector to find the first uncheduled node in a path.
+		 */
+		for (vector<Nodes>::size_type i = 0; i < this->nodes.size(); i++) {
+			tempNode = this->nodes.at(i);
+
+			// Iterate through the node's edge vector to find the next node and schedule the path.
+			for (vector<Edges>::size_type j = 0; j < tempNode.getEdges().size(); j++) {
+				// Establish node values we're using
+				tempEdge = tempNode.getEdges().at(j); // Set a temp edge for ease of reading and programming.
+				nextNode = tempEdge.getNextNode();
+
+				// Save ALAP values
+				if (nextNode >= 0) {										// Check if the index is >= 0 so we dont try and pull a negative index.
+					nextNodeALAP = nodes.at(nextNode).getALAP();
+				}
+				else {													// If the index < 0 then we need to prevent the code below from exicuting.
+					nextNodeALAP = -1;
+				}
+				curALAP = this->nodes.at(i).getALAP();
+
+				if ((nextNodeALAP < curALAP) && (nextNodeALAP > 0)) {
+					nodes.at(i).setALAP(curALAP - (curALAP + 1 - nextNodeALAP));
+					change = true;
+
+					// Exit for-loops to loop again.
+					i = this->nodes.size() + 1;
+					j = tempNode.getEdges().size() + 1;
+				}
+				else if (nextNodeALAP == curALAP) {
+					nodes.at(i).setALAP(curALAP - 1);
+					change = true;
+
+					// Exit for-loops to loop again.
+					i = this->nodes.size() + 1;
+					j = tempNode.getEdges().size() + 1;
+				}
+				else {
+					change = false;
+				}
+			}
+
+			// Initialize variables.
+			tempNode.init();
+			tempEdge.init();
+		}
+	}
+	
 }
 
 void Graph::Schedule() {

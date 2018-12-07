@@ -259,6 +259,8 @@ void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int num
 	int tempNum = 1;				// Saves the Time stamp, start at T1
 	vector <Nodes> tempNodes;		// Saves all nodes exicuting at current time stamp.
 	vector <Edges> tempEdges;		// Saves the node's edge vector.
+	vector <Edges> ifEdges;
+	vector <Edges> elseEdges;
 	Edges ifEdge;
 	Edges elseEdge;
 	string tempCond;
@@ -278,9 +280,11 @@ void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int num
 						if (tempEdges.at(eg).getConditionalOperation().find("else") != string::npos) {
 							elseEdge = tempEdges.at(eg);
 							hasElse = true;
+							elseEdges.push_back(elseEdge);
 						}
 						else {
 							ifEdge = tempEdges.at(eg);
+							ifEdges.push_back(ifEdge);
 						}
 					}
 				}
@@ -288,7 +292,7 @@ void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int num
 		}
 
 		file << "\t\t\ts" << tempNum << " : begin" << endl;						// Start the state.
-		
+
 		// Add operations:
 		for (vector<Nodes>::size_type ind = 0; ind < tempNodes.size(); ind++) {
 			file << "\t\t\t\t" << tempNodes.at(ind).getOperation() << endl;		// Write the node's operation.
@@ -349,9 +353,15 @@ void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int num
 		tempNodes.clear();
 		// Clear tempEdges for next time stamp.
 		tempEdges.clear();
+
+		// Clear the if & else edges vectors
+		ifEdges.clear();
+		elseEdges.clear();
+
 		// Initialize the temp edges.
 		ifEdge.init();
 		elseEdge.init();
+
 		// Initialize the temp condition and hasElse.
 		tempCond = "";
 		hasElse = false;
