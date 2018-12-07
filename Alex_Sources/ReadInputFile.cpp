@@ -489,9 +489,9 @@ int ReadInputFile::handleOperations(ifstream &file, Graph* graph){
 	string token, token2;
 	Nodes newNode;
 	vector<string> allVariables;
-	vector<string> ifStatementConditions;
 	vector<string> braceOpener;				//Keeps track of current brace opener. When we find a '}' we know what it is closing
 	vector<string> conditionVariables;		//Keeps track of nested conditions. EX: if(a) { if(b) { } } we will know a && b so can become if (a && b) { }
+	string potentialElseVar;
 	int insideIfStatements = 0;
 
 	bool validVariable = false;
@@ -562,11 +562,13 @@ int ReadInputFile::handleOperations(ifstream &file, Graph* graph){
 				}
 				if (braceOpener.back() == "if") { 
 					insideIfStatements--;
-					ifStatementConditions.pop_back();
+					potentialElseVar = conditionVariables.back();
+					potentialElseVar = "!" + potentialElseVar;
 					conditionVariables.pop_back();
 				}
 				else if (braceOpener.back() == "else") {
 					//Might not need to do anything unique?
+					conditionVariables.pop_back();
 				}
 				else if (braceOpener.back() == "for") {
 					//FIXME incomplete
@@ -625,11 +627,17 @@ int ReadInputFile::handleOperations(ifstream &file, Graph* graph){
 
 			insideIfStatements++;		
 			braceOpener.push_back("if");
-			ifStatementConditions.push_back(inputLine);
 			doneWithLine = true;
 			isIfElseStatement = true;
 		}
 		else if (!doneWithLine && token.find("else") != string::npos) {
+			if (!potentialElseVar.empty()) {
+				conditionVariables.push_back(potentialElseVar);
+			}
+			else {
+				cout << "Error getting else condition" << endl;
+				return -1;
+			}
 			braceOpener.push_back("else");
 			doneWithLine = true;
 			skipLine = true;
