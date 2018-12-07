@@ -24,6 +24,7 @@ int main(int argc, char* argv[]) {
 	if (argc != 4) {
 		cout << "ERROR: Incorrect arguments." << endl;
 		cout << "Correct argumets:\thlsyn cFile latency verilogFile" << endl;
+		return 0;
 	}
 
 	ifstream inputFilename;
@@ -120,7 +121,7 @@ int main(int argc, char* argv[]) {
 		cout << "Wrote Operations" << endl;									// DEBUGGING (Remove this)
 		//write.writeGraph(outputFilename, graph);
 		*/
-		read.printVariables();
+		//read.printVariables();
 		cout << endl;
 		for (Nodes node : graph.getNodes()) {
 			node.printNode();	//PRINT NODES

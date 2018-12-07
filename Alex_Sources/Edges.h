@@ -15,23 +15,23 @@ class Edges {
 
 private:
 	string conditionalOperation;
-	Nodes* prevNode;
-	Nodes* nextNode;
+	int prevNode;
+	int nextNode;
 
 public:
 	// constructors
 	Edges();
-	Edges(string condOp, Nodes* newPrevNode, Nodes* newNextNode);
+	Edges(string condOp, int newPrevNode, int newNextNode);
 
 	//setters
 	void setCondtionalOperation(string condOp);
-	void setPrevNode(Nodes* newPrevNode);
-	void setNextNode(Nodes* newNextNode);
+	void setPrevNode(int newPrevNode);
+	void setNextNode(int newNextNode);
 
 	//getters
 	string getConditionalOperation();
-	Nodes* getPrevNode();
-	Nodes* getNextNode();
+	int getPrevNode();
+	int getNextNode();
 
 	//Methods
 	void printEdge();
