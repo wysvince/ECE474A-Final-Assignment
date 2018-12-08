@@ -15,11 +15,12 @@ class Edges;
 class Nodes {
 
 private:
-	int stateNum;
+	int nodeNum;
 	int asapTime;
 	int alapTime;
 	int numCycles;
 	int ifStatementLevel;
+	bool withinElse;
 	vector<Edges> edges;
 	string operation;
 	vector<string> variablesInvolved; //First variable is always the output
@@ -30,7 +31,7 @@ public:
 	Nodes(int newStateNum, Edges newEdges, int newNumCycles, string op);
 
 	//setters
-	void setStateNum(int newStateNum);
+	void setNodeNum(int newStateNum);
 	void setAsapTime(int newTime);
 	void setAlapTime(int newTime);
 	void setNumCycles(int newNumCycles);
@@ -38,9 +39,10 @@ public:
 	void setEdges(Edges newEdges);
 	void setOperation(string op);
 	void setVariablesInvolved(vector<string> vbs);
+	void setWithinElse(bool b);
 
 	//getters
-	int getStateNum();
+	int getNodeNum();
 	int getAsapTime();
 	int getAlapTime();
 	int getNumCycles();
@@ -49,10 +51,13 @@ public:
 	string getOperation();
 	vector<string> getVariablesInvolved();
 	string getOutputVariable();
+	bool getWithinElse();
 
 	//Methods
 	void addEdge(Edges newEdge);
 	void printNode();
+	bool hasConditionalEdge();
+	bool hasElseEdge();
 
 };
 

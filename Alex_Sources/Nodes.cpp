@@ -7,15 +7,16 @@ using namespace std;
 Nodes::Nodes() {} // default constructor
 
 Nodes::Nodes(int newStateNum, Edges newEdges, int newNumCycles, string op) {
-	this->stateNum = newStateNum;
+	this->nodeNum = newStateNum;
 	this->edges.push_back(newEdges);
 	this->numCycles = newNumCycles;
 	this->operation = op;
+	withinElse = false;
 }
 
 // setters
-void Nodes::setStateNum(int newStateNum) {
-	this->stateNum = newStateNum;
+void Nodes::setNodeNum(int newStateNum) {
+	this->nodeNum = newStateNum;
 }	
 
 void Nodes::setAsapTime(int newTime) {
@@ -46,9 +47,13 @@ void Nodes::setVariablesInvolved(vector<string> vbs) {
 	variablesInvolved = vbs;
 }
 
+void Nodes::setWithinElse(bool b) {
+	withinElse = b;
+}
+
 // getters
-int Nodes::getStateNum() {
-	return this->stateNum;
+int Nodes::getNodeNum() {
+	return this->nodeNum;
 }
 
 int Nodes::getAsapTime() {
@@ -83,23 +88,62 @@ string Nodes::getOutputVariable() {
 	return variablesInvolved.at(0);
 }
 
+bool Nodes::getWithinElse() {
+	return withinElse;
+}
+
 //Methods
 
 void Nodes::addEdge(Edges newEdge) {
+	for (Edges edge : edges) {
+		if (edge.getNextNode() == newEdge.getNextNode()) {
+			if (edge.getConditionalOperation().empty() && !newEdge.getConditionalOperation().empty()) {
+				edge.setCondtionalOperation(newEdge.getConditionalOperation());
+			}
+			return;
+		}
+	}
+
 	edges.push_back(newEdge);
 }
+
+bool Nodes::hasConditionalEdge() {
+	for (Edges edge : edges) {
+		if (!edge.getConditionalOperation().empty()) {//if edge condition is not empty
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Nodes::hasElseEdge() {
+	for (Edges edge : edges) {
+		if (!edge.getConditionalOperation().empty()) {//if edge condition is not empty
+			if (edge.getConditionalOperation().find("else {") != string::npos) { //token.find("if") != string::npos
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 
 void Nodes::printNode() {
 	int i = 1;
 	cout << "****************************************" << endl;
-	cout << "Node: " << stateNum << endl;
+	cout << "Node: " << nodeNum << endl;
 	cout << "Operation: " << operation << endl;
 	cout << "ASAP: " << asapTime << endl;
 	cout << "\tEdges\t" << endl;
-	cout << "----------------------------------------" << endl;
-	for (Edges edge : edges) {
-		cout << i << "." << endl;
-		edge.printEdge();
-		i++;
+	cout << "\t------------------------\t" << endl;
+	if (edges.size() > 0) {
+		for (Edges edge : edges) {
+			cout << i << "." << endl;
+			edge.printEdge();
+			i++;
+		}
+	}
+	else {
+		cout << "\tNo Edges" << endl;
 	}
 }
