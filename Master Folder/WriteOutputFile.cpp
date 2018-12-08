@@ -193,7 +193,7 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	weight = graph.getWeight();
 
 	int numBits;
-	int numTimes = 0;
+	int numTimes = 0;						// Total amount of time states.
 
 	for (vector<Nodes>::size_type k = 0; k < nodes.size(); k++) {
 		if (nodes.at(k).getListR() > numTimes) {
@@ -317,7 +317,12 @@ void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int num
 
 			// Else state.
 			file << "\t\t\t\t\telse begin" << endl;
-			file << "\t\t\t\t\t\tstate <= s" << elseState << ";" << endl;
+			if (tempNum >= numTimes) {
+				file << "\t\t\t\t\t\tstate <= Final;" << endl;
+			}
+			else {
+				file << "\t\t\t\t\t\tstate <= s" << elseState << ";" << endl;
+			}
 			file << "\t\t\t\t\tend" << endl;
 		}
 		else if (hasElse == false && tempCond.empty() == false) {				// Only has an if.
@@ -333,6 +338,9 @@ void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int num
 			file << "\t\t\t\t\telse begin" << endl;
 			if (ifState == tempNum + 1) {
 				file << "\t\t\t\t\t\tstate <= s" << tempNum + 2 << ";" << endl;
+			}
+			else if (tempNum >= numTimes) {
+				file << "\t\t\t\t\t\tstate <= Final;" << endl;
 			}
 			else {
 				file << "\t\t\t\t\t\tstate <= s" << tempNum + 1 << ";" << endl;
