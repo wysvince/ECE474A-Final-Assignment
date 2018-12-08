@@ -193,12 +193,12 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	
 	// Write State machine.
 	// Write States:
-	file << "\treg [" << numBits - 1 << ", 0] state;\n" << endl; // total number of states -1 because we're assigning it's binary value.
-	file << "\treg [" << numBits - 1 << ", 0] Wait = " << numBits << "'d0;" << endl;
+	file << "\treg [" << numBits - 1 << " : 0] state;\n" << endl; // total number of states -1 because we're assigning it's binary value.
+	file << "\treg [" << numBits - 1 << " : 0] Wait = " << numBits << "'d0;" << endl;
 	for (int ind = 0; ind < numTimes; ind++) {
-		file << "\treg [" << numBits - 1 << ", 0] s" << ind << " = " << numBits << "'d" << ind +1 << ";"<< endl; // + 1 because we're starting at the second point in the binary number.
+		file << "\treg [" << numBits - 1 << " : 0] s" << ind << " = " << numBits << "'d" << ind +1 << ";"<< endl; // + 1 because we're starting at the second point in the binary number.
 	}
-	file << "\treg [" << numBits - 1 << ", 0] Final = " << numBits << "'d" << numTimes + 1 << ";\n" << endl;
+	file << "\treg [" << numBits - 1 << " : 0] Final = " << numBits << "'d" << numTimes + 1 << ";\n" << endl;
 
 	// Start always @ (posedge Clk):
 	file << "\talways @ (posedge Clk) begin : FSM" << endl;
@@ -214,7 +214,7 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	// Define Wait State:
 	file << "\t\t\t\tWait : begin" << endl;											// Start the Wait State:
 	file << "\t\t\t\t\tif (Start == 1'b1) begin" << endl;								// If statement for Wait State, if (start == 1) Begin... 
-	file << "\t\t\t\t\t\tstate <= s1;" << endl;										// Set next state to be first node.
+	file << "\t\t\t\t\t\tstate <= s0;" << endl;										// Set next state to be first node.
 	file << "\t\t\t\t\tend" << endl;													// End the if.
 	file << "\t\t\t\tend\n" << endl;													// End the state:
 
@@ -274,7 +274,7 @@ void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int num
 			}
 		}
 
-		file << "\t\t\t\ts" << tempNum << " : begin" << endl;						// Start the state.
+		file << "\t\t\t\ts" << tempNum - 1 << " : begin" << endl;						// Start the state.
 		
 		// Add operations:
 		for (vector<Nodes>::size_type ind = 0; ind < tempNodes.size(); ind++) {
