@@ -55,6 +55,7 @@ public:
 	Nodes findLowestSlack(int);
 	void createUnscheduledList();
 	void createALAPSchedule(int latency);
+	void checkALAP(int latency);
 	void addNode(Nodes newNode);
 	void addEdges(Edges newEdge);
 	Nodes returnNode(int num);
