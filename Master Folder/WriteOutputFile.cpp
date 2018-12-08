@@ -196,7 +196,7 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	file << "\treg [" << numBits - 1 << ", 0] state;\n" << endl; // total number of states -1 because we're assigning it's binary value.
 	file << "\treg [" << numBits - 1 << ", 0] Wait = " << numBits << "'d0;" << endl;
 	for (int ind = 0; ind < numTimes; ind++) {
-		file << "\treg [" << numBits - 1 << ", 0] s" << ind +1 << " = " << numBits << "'d" << ind +1 << ";"<< endl; // + 1 because we're starting at the second point in the binary number.
+		file << "\treg [" << numBits - 1 << ", 0] s" << ind << " = " << numBits << "'d" << ind +1 << ";"<< endl; // + 1 because we're starting at the second point in the binary number.
 	}
 	file << "\treg [" << numBits - 1 << ", 0] Final = " << numBits << "'d" << numTimes + 1 << ";\n" << endl;
 
@@ -206,33 +206,33 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	// Start If
 	file << "\t\tif(Rst == 1'b1)begin" << endl;
 	file << "\t\t\tstate <= Wait;" << endl;
-	file << "\t\tend \n\telse begin\n" << endl; // Start else
+	file << "\t\tend \n\t\telse begin\n" << endl; // Start else
 
 	// Start Case:
-	file << "\t\tcase(state)" << endl;
+	file << "\t\t\tcase(state)" << endl;
 
 	// Define Wait State:
-	file << "\t\t\tWait : begin" << endl;											// Start the Wait State:
-	file << "\t\t\t\tif (Start == 1'b1) begin" << endl;								// If statement for Wait State, if (start == 1) Begin... 
-	file << "\t\t\t\t\tstate <= s1" << endl;										// Set next state to be first node.
-	file << "\t\t\t\tend" << endl;													// End the if.
-	file << "\t\t\tend\n" << endl;													// End the state:
+	file << "\t\t\t\tWait : begin" << endl;											// Start the Wait State:
+	file << "\t\t\t\t\tif (Start == 1'b1) begin" << endl;								// If statement for Wait State, if (start == 1) Begin... 
+	file << "\t\t\t\t\t\tstate <= s1;" << endl;										// Set next state to be first node.
+	file << "\t\t\t\t\tend" << endl;													// End the if.
+	file << "\t\t\t\tend\n" << endl;													// End the state:
 
 	// Schedule the States:
 	writeStates(file, nodes, numTimes);												// Reads in file, nodes vector, and the amount of time states we have, then writes all the time states.
 
 	// Define Final State:
-	file << "\t\t\tFinal : begin" << endl;											// Begin Final State.
-	file << "\t\t\t\tDone <= 1'b1;" << endl << "\t\t\t\tState <= Wait;" << endl;	// Contents of Final State. (Set Done <= 1 and go to wait)
-	file << "\t\t\tend\n" << endl;													// End Final State.
+	file << "\t\t\t\tFinal : begin" << endl;											// Begin Final State.
+	file << "\t\t\t\t\tDone <= 1'b1;" << endl << "\t\t\t\t\tState <= Wait;" << endl;	// Contents of Final State. (Set Done <= 1 and go to wait)
+	file << "\t\t\t\tend\n" << endl;													// End Final State.
 
 	// Default State:
-	file << "\t\t\tdefault : begin" << endl;										// Begin Default state.
-	file << "\t\t\t\tstate <= Wait;" << endl;										// Contents of default state. (go to wait)
-	file << "\t\t\tend\n" << endl;													// End Default.
+	file << "\t\t\t\tdefault : begin" << endl;										// Begin Default state.
+	file << "\t\t\t\t\tstate <= Wait;" << endl;										// Contents of default state. (go to wait)
+	file << "\t\t\t\tend\n" << endl;													// End Default.
 
 	// End Case:
-	file << "\t\tendcase" << endl << "\tend" << endl;
+	file << "\t\t\tendcase" << endl << "\t\tend" << endl;
 
 	// End always @ (posedge Clk):
 	file << "\tend" << endl;
@@ -274,11 +274,11 @@ void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int num
 			}
 		}
 
-		file << "\t\t\ts" << tempNum << " : begin" << endl;						// Start the state.
+		file << "\t\t\t\ts" << tempNum << " : begin" << endl;						// Start the state.
 		
 		// Add operations:
 		for (vector<Nodes>::size_type ind = 0; ind < tempNodes.size(); ind++) {
-			file << "\t\t\t\t" << tempNodes.at(ind).getOperation() << endl;		// Write the node's operation.
+			file << "\t\t\t\t\t" << tempNodes.at(ind).getOperation() << ";" << endl;		// Write the node's operation.
 		}
 
 		// Find the condition from condEdge.
@@ -290,7 +290,7 @@ void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int num
 
 		// Check if we have reached the last time stamp.
 		if ((tempNum < numTimes) && tempCond.empty() == true) {
-			file << "\t\t\t\tstate <= s" << tempNum + 1 << endl;				// Write the next state.
+			file << "\t\t\t\t\tstate <= s" << tempNum << ";" << endl;				// Write the next state.
 		}
 		else if (hasElse == true && tempCond.empty() == false) {				// Has a defined else.
 			// Find the next State.
@@ -298,39 +298,39 @@ void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int num
 			elseState = nodes.at(elseEdge.getNextNode() - 1).getListR();
 
 			// If state.
-			file << "\n\t\t\t\t" << tempCond << " begin" << endl;
-			file << "\t\t\t\t\tstate <= s" << ifState << endl;
-			file << "\t\t\t\tend" << endl;
+			file << "\n\t\t\t\t\t" << tempCond << " begin" << endl;
+			file << "\t\t\t\t\t\tstate <= s" << ifState << ";" << endl;
+			file << "\t\t\t\t\tend" << endl;
 
 			// Else state.
-			file << "\t\t\t\telse begin" << endl;
-			file << "\t\t\t\t\tstate <= s" << elseState << endl;
-			file << "\t\t\t\tend" << endl;
+			file << "\t\t\t\t\telse begin" << endl;
+			file << "\t\t\t\t\t\tstate <= s" << elseState << ";" << endl;
+			file << "\t\t\t\t\tend" << endl;
 		}
 		else if (hasElse == false && tempCond.empty() == false) {				// Only has an if.
 			// Find the next State.
 			ifState = nodes.at(ifEdge.getNextNode() - 1).getListR();
 
 			// If state.
-			file << "\n\t\t\t\t" << tempCond << " begin" << endl;
-			file << "\t\t\t\t\tstate <= s" << ifState << endl;
-			file << "\t\t\t\tend" << endl;
+			file << "\n\t\t\t\t\t" << tempCond << " begin" << endl;
+			file << "\t\t\t\t\t\tstate <= s" << ifState << ";" << endl;
+			file << "\t\t\t\t\tend" << endl;
 
 			// Else state.
-			file << "\t\t\t\telse begin" << endl;
+			file << "\t\t\t\t\telse begin" << endl;
 			if (ifState == tempNum + 1) {
-				file << "\t\t\t\t\tstate <= s" << tempNum + 2 << endl;
+				file << "\t\t\t\t\t\tstate <= s" << tempNum + 2 << ";" << endl;
 			}
 			else {
-				file << "\t\t\t\t\tstate <= s" << tempNum + 1 << endl;
+				file << "\t\t\t\t\t\tstate <= s" << tempNum + 1 << ";" << endl;
 			}
-			file << "\t\t\t\tend" << endl;
+			file << "\t\t\t\t\tend" << endl;
 		}
 		else {
-			file << "\t\t\t\tstate <= Final" << endl;							// At the last time so go to Final state.
+			file << "\t\t\t\t\tstate <= Final;" << endl;							// At the last time so go to Final state.
 		}
 
-		file << "\t\t\tend\n" << endl;											// End the state.
+		file << "\t\t\t\tend\n" << endl;											// End the state.
 
 		// Clear tempNodes for next time stamp.
 		tempNodes.clear();
