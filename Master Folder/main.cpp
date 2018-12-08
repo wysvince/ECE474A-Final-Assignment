@@ -100,6 +100,10 @@ int main(int argc, char* argv[]) {
 		graph.createListRSchedule(latency);
 		cout << "Ending ListR" << endl;
 
+		for (Nodes node : graph.getNodes()) {
+			cout << "Node" << node.getNodeNum() << " list_R time: " << node.getListR() << endl;
+		}
+
 		// close input file
 		inputFilename.close();
 		cout << "File closed" << endl;										// DEBUGGING (Remove this)

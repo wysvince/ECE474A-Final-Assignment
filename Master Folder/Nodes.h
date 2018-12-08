@@ -18,6 +18,7 @@ private:
 	vector<Edges> edges;
 	int numCycles;
 	string operation;
+	string resourceType;
 	int asapTime;
 	int alapTime;
 	int listRTime;
@@ -48,6 +49,7 @@ public:
 	void setIfStatementLevel(int level);
 	void setVariablesInvolved(vector<string> vbs);
 	void setWithinElse(bool b);
+	void setResourceType(string type);
 
 	//getters
 	int getNodeNum();
@@ -64,6 +66,7 @@ public:
 	vector<string> getVariablesInvolved();
 	string getOutputVariable();
 	bool getWithinElse();
+	string getResourceType();
 
 	//Methods
 	void addEdge(Edges newEdge);

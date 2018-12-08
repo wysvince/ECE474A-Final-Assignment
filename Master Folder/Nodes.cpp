@@ -91,6 +91,10 @@ void Nodes::setWithinElse(bool b) {
 	withinElse = b;
 }
 
+void Nodes::setResourceType(string type) {
+	resourceType = type;
+}
+
 // getters
 int Nodes::getNodeNum() {
 	return this->nodeNum;
@@ -149,6 +153,10 @@ string Nodes::getOutputVariable() {
 
 bool Nodes::getWithinElse() {
 	return withinElse;
+}
+
+string Nodes::getResourceType() {
+	return resourceType;
 }
 
 //Methods

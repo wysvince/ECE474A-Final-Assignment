@@ -78,213 +78,137 @@ vector<int> Graph::getListRSchedule()
 // latency constrained, considers minimum resource
 void Graph::createListRSchedule(int latency)
 {
-	//vector<int>::iterator it;
-	vector<Nodes> tempList = nodes;
-	int tempSlack;
-	Nodes tempNode;
-	int tempInt;
-	vector<int> dependencyList;
-	int index = -1;
-	int nodeIndex = -1;
-	bool flag = false;
-	bool exit = false;
-	int currASAP;
-	int count = 0;
-	for (int cycle = 1; cycle < (latency + 1); cycle++) {
-		
-		cout << endl << "Time Cycle: " << cycle << endl << endl;
-		tempSlack = 999;
-		// set slack time for current cycle for the remaining nodes
-		cout << "Set slack time" << endl << endl;
-		for (unsigned int j = 0; j < nodes.size(); j++) {
-			if (nodes.at(j).getSlack() != 99) {
-				int alapTime = nodes.at(j).getALAP();
-				int slack = nodes.at(j).calculateSlack(alapTime, cycle);
-				nodes.at(j).setSlack(slack);
+	int numMultipliers = 1;
+	int usedMultipliers = 0;
+	int numAdders = 1;
+	int usedAdders = 0;
+	int numLogicals = 1;
+	int usedLogicals = 0;
+
+	int currentTime = 0;
+	int nodesLeftToSchedule = this->nodes.size();
+	vector<Nodes*> candidateNodes;
+
+	while (nodesLeftToSchedule > 0) {
+		candidateNodes.clear();
+		usedMultipliers = 0;
+		usedAdders = 0;
+		usedLogicals = 0;
+		for (int i = 0; i < nodes.size(); ++i) {		//Determine candidate Nodes
+			if (nodes.at(i).getASAP() <= currentTime && !nodes.at(i).getChecked()) {	//detected by ASAP time and !checked-(means not already scheduled in this case)
+				candidateNodes.push_back(&nodes.at(i));
+				nodes.at(i).setSlack(currentTime - nodes.at(i).getALAP()); //set slack at current time
 			}
 		}
-		for (unsigned int i = 0; i < nodes.size(); i++) {
-			cout << "Node: " << nodes.at(i).getNodeNum() << "\tSlack: " << nodes.at(i).getSlack() << endl;
-		}
-		cout << endl;
-
-		// update cycle count
-		cout << "Update cycle count" << endl;
-		if (S.empty()) {
-				
-		}
-		else {
-			for (unsigned int i = 0; i < S.size(); i++) {
-				tempInt = S.at(i);
-				tempNode = returnNode(tempInt);
-				nodeIndex = returnNodeIndex(tempInt);
-				nodes.at(nodeIndex).setCycleCount(-1);
-			}
-		}
-
-		for (unsigned int i = 0; i < nodes.size(); i++) {
-			cout << "Node: " << nodes.at(i).getNodeNum() << "\tCycle count: " << nodes.at(i).getCycleCount() << endl;
-		}
-		cout << endl;
-
-		// update scheduled list
-		cout << "Update scheduled list" << endl;
-		for (unsigned int i = 0; i < nodes.size(); i++) {
-			if (nodes.at(i).getCycleCount() == 0) {
-				for (unsigned int j = 0; j < S.size(); j++) {
-					if (nodes.at(i).getNodeNum() == S.at(j)) {
-						nodes.at(i).setSlack(99);
-						S.erase(S.begin() + j);
-					}
-				}
-			}
-		}
-		cout << "Updated Scheduled List: " << endl;
-		for (int i : S) {
-			cout << "Node: " << i << endl;
-		}
-		cout << endl;
-
-		// adding nodes to list Unscheduled
-		cout << "Add nodes to unscheduled list" << endl;
-		// checks for nodes with no previous dependencies
-		// In Time Cycle 1
-		if (cycle == 1) {
-			for (unsigned int i = 0; i < nodes.size(); i++) {
-				if (nodes.at(i).getASAP() == 1) {
-					tempInt = nodes.at(i).getNodeNum();
-					tempNode = returnNode(tempInt);
-					nodeIndex = returnNodeIndex(tempInt);
-					if (nodes.at(nodeIndex).getChecked() == false) {
-						U.push_back(tempInt);
-						nodes.at(nodeIndex).setChecked(true);
-					}
-				}
-			}
-		}
-		else { // not in Time Cycle 1
-			for (unsigned int j = 0; j < nodes.size(); j++) {
-				flag = false; // reset flag
-				// checks if node has been checked
-				if (nodes.at(j).getChecked() == false) {
-					if (nodes.at(j).getASAP() == cycle) {
-						tempInt = nodes.at(j).getNodeNum();
-						nodeIndex = returnNodeIndex(tempInt);
-						U.push_back(tempInt);
-						nodes.at(nodeIndex).setChecked(true);
-					}
-				}
-			}
-		}
-		cout << "Unscheduled List: " << endl;
-		for (int i : U) {
-			cout << "Node: " << i << endl;
-		}
-		cout << endl;
-
-		// checks if list scheduled is empty
-		cout << "Add unscheduled nodes to scheduled list" << endl;
-		if (S.empty() && !(U.empty())) {
-			for (unsigned int i = 0; i < U.size(); i++) {
-				tempNode = returnNode(U.at(i));
-				nodeIndex = returnNodeIndex(U.at(i));
-				if (nodes.at(nodeIndex).getChecked() == true) {
-					if (countResource() == 1) {
-						if (nodes.at(nodeIndex).getNumCycles() == 2) {
-							S.push_back(U.at(i));
-							nodes.at(nodeIndex).setListR(cycle);
-							nodes.at(nodeIndex).setCycleCount(3);
-							nodes.at(nodeIndex).setSlack(99);
+		//REMOVE DEPENDENT NODES
+		for (int i = 0; i < candidateNodes.size(); ++i) {
+			for (Edges edges : candidateNodes.at(i)->getEdges()) {
+				for (int j = 0; j < candidateNodes.size(); ++j) {
+					if (edges.getNextNode() == candidateNodes.at(j)->getNodeNum()) {
+						candidateNodes.erase(candidateNodes.begin() + j);
+						if (j < i) {
+							i--; //make sure i follows the shift of the vector
 						}
-					}
-					else if (nodes.at(nodeIndex).getNumCycles() == 1) {
-						if (countResource() != 1) {
-							S.push_back(U.at(i));
-							nodes.at(nodeIndex).setListR(cycle);
-							nodes.at(nodeIndex).setCycleCount(2);
-							nodes.at(nodeIndex).setSlack(99);
-						}
+						--j;
 					}
 				}
 			}
-			// scheduled list is not empty
 		}
-		else if (!(S.empty()) && !(U.empty())) {
-			if (countResource() < 3) {
-				if (countResource() == 2) {
-					//for (unsigned int i = 0; i < U.size(); i++) {
-						tempNode = findLowestSlack(1);
-						tempInt = tempNode.getNodeNum();
-						nodeIndex = returnNodeIndex(tempInt);
-						if (nodeIndex != -1 && foundDependency(tempInt) == false) {
-							S.push_back(tempInt);
-							nodes.at(nodeIndex).setListR(cycle);
-							nodes.at(nodeIndex).setCycleCount(2);
-							nodes.at(nodeIndex).setSlack(99);
-						}
-					//}
+
+		for (int i = 0; i < candidateNodes.size(); ++i) {	//Schedules all nodes with 0 slack first
+			if (candidateNodes.at(i)->getSlack() == 0) {
+				--nodesLeftToSchedule;
+				candidateNodes.at(i)->setListR(currentTime);
+				candidateNodes.at(i)->setChecked(true);
+				if (candidateNodes.at(i)->getResourceType() == "Logic") {
+					++usedLogicals;
+					if (usedLogicals > numLogicals) {
+						++numLogicals;
+					}
 				}
-				else {
-					//for (unsigned int i = 0; i < U.size(); i++) {
-						tempNode = findLowestSlack(2);
-						tempInt = tempNode.getNodeNum();
-						nodeIndex = returnNodeIndex(tempInt);
-						if (nodeIndex != -1 && foundDependency(tempInt) == false) {
-							S.push_back(tempInt);
-							nodes.at(nodeIndex).setListR(cycle);
-							nodes.at(nodeIndex).setCycleCount(3);
-							nodes.at(nodeIndex).setSlack(99);
-						}
-					//}
+				else if (candidateNodes.at(i)->getResourceType() == "Adder") {
+					++usedAdders;
+					if (usedAdders > numAdders) {
+						++numAdders;
+					}
+				}
+				else if (candidateNodes.at(i)->getResourceType() == "Mult") {
+					++usedMultipliers;
+					if (usedMultipliers > numMultipliers) {
+						++numMultipliers;
+					}
 				}
 			}
 		}
-		cout << "Scheduled List: " << endl;
-		for (int i : S) {
-			cout << "Node: " << i << endl;
-		}
-		cout << endl;
-
-		// update unscheduled list
-		for (unsigned int i = 0; i < U.size(); i++) {
-			for (unsigned int j = 0; j < S.size(); j++) {
-				if (S.at(j) == U.at(i)) {
-					U.erase(U.begin() + i);
+		//Check if we have left over resources
+		while (usedLogicals < numLogicals) {
+			int lowestSlackTime = 10000;
+			int lowestSlackIndex = -1;
+			for (int i = 0; i < candidateNodes.size(); ++i) {
+				if (!candidateNodes.at(i)->getChecked() && candidateNodes.at(i)->getResourceType() == "Logic") {	//node has not been scheduled yet
+					if (candidateNodes.at(i)->getSlack() < lowestSlackTime) {
+						lowestSlackTime = candidateNodes.at(i)->getSlack();
+						lowestSlackIndex = i;
+					}
 				}
 			}
-		}
-			
-		cout << "Updated Unscheduled List: " << endl;
-		for (int i : U) {
-			cout << "Node: " << i << endl;
-		}
-		cout << endl;
-
-		cout << "Cycle counts" << endl;
-		for (unsigned int i = 0; i < nodes.size(); i++) {
-			cout << "Node: " << nodes.at(i).getNodeNum() << "\tCycle count: " << nodes.at(i).getCycleCount() << endl;
-		}
-		cout << endl;
-		
-		// checks if all nodes has been visited and listR has been set
-		int count = 0;
-		for (Nodes n : nodes) {
-			if (n.getListR() != -1) {
-				count++;
+			if (lowestSlackIndex == -1) {	//No nodes to schedule
+				break;
+			}
+			else {
+				candidateNodes.at(lowestSlackIndex)->setChecked(true);
+				candidateNodes.at(lowestSlackIndex)->setListR(currentTime);
+				--nodesLeftToSchedule;
+				++usedLogicals;
 			}
 		}
-		if (count == nodes.size()) {
-			break;
+		while (usedAdders < numAdders) {
+			int lowestSlackTime = 10000;
+			int lowestSlackIndex = -1;
+			for (int i = 0; i < candidateNodes.size(); ++i) {
+				if (!candidateNodes.at(i)->getChecked() && candidateNodes.at(i)->getResourceType() == "Adder") {	//node has not been scheduled yet
+					if (candidateNodes.at(i)->getSlack() < lowestSlackTime) {
+						lowestSlackTime = candidateNodes.at(i)->getSlack();
+						lowestSlackIndex = i;
+					}
+				}
+			}
+			if (lowestSlackIndex == -1) {	//No nodes to schedule
+				break;
+			}
+			else {
+				candidateNodes.at(lowestSlackIndex)->setChecked(true);
+				candidateNodes.at(lowestSlackIndex)->setListR(currentTime);
+				--nodesLeftToSchedule;
+				++usedAdders;
+			}
+		}
+		while (usedMultipliers < numMultipliers) {
+			int lowestSlackTime = 10000;
+			int lowestSlackIndex = -1;
+			for (int i = 0; i < candidateNodes.size(); ++i) {
+				if (!candidateNodes.at(i)->getChecked() && candidateNodes.at(i)->getResourceType() == "Mult") {	//node has not been scheduled yet
+					if (candidateNodes.at(i)->getSlack() < lowestSlackTime) {
+						lowestSlackTime = candidateNodes.at(i)->getSlack();
+						lowestSlackIndex = i;
+					}
+				}
+			}
+			if (lowestSlackIndex == -1) {	//No nodes to schedule
+				break;
+			}
+			else {
+				candidateNodes.at(lowestSlackIndex)->setChecked(true);
+				candidateNodes.at(lowestSlackIndex)->setListR(currentTime);
+				--nodesLeftToSchedule;
+				++usedMultipliers;
+			}
 		}
 
-	} // end: for loop (cycle)
-
-		cout << "List_R List: " << endl;
-		for (unsigned int i = 0; i < nodes.size(); i++) {
-		cout << "Node: " << nodes.at(i).getNodeNum() << "\tListR time = " << nodes.at(i).getListR() << endl;
+		++currentTime;
 	}
-		cout << endl;
-}//gitpush _ 12/6 8:11PM
+	
+}//END LIST_R
 
 bool Graph::foundDependency(int nodeNum) {
 	bool flag = false;
@@ -636,6 +560,7 @@ void Graph::addNode(Nodes newNode, int ifStatementLevel, vector<string> conditio
 								edgeCondition += ") {";
 								newEdge.setCondtionalOperation(edgeCondition);
 							}
+							edges.push_back(newEdge);
 							nodes.at(i).addEdge(newEdge); //adds edge to node pointing to newNode				//FIXME AVOID DUPLICATE EDGES (override edge ==)
 							//break;
 						}

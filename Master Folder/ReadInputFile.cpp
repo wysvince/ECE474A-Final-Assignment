@@ -794,6 +794,7 @@ int ReadInputFile::handleOperations(ifstream &file, Graph* graph){
 			{
 				newNode.setOperation(inputLine);
 				newNode.setNumCycles(1);
+				newNode.setResourceType("Logic");
 				doneWithLine = true;			//Valid output
 			}
 			if (validVariable && !doneWithLine)	//Means there was a second variable, indicating an operation other than x = y
@@ -803,15 +804,20 @@ int ReadInputFile::handleOperations(ifstream &file, Graph* graph){
 					newNode.setOperation(inputLine);
 					if (token == "*") {
 						newNode.setNumCycles(2);	//Multipliers take 2 cycles
+						newNode.setResourceType("Mult");
 					}
 					else {
 						newNode.setNumCycles(1);	//ALUs take 1 cycle
+						if (token == "+" || token == "-") {
+							newNode.setResourceType("Adder");
+						}
 					}
 					doneWithLine = true;
 				}
 				else if (token == "?")		//MUX
 				{
 					inputLineStream >> token;
+					newNode.setResourceType("Logic");
 					if (token == ":")	//Mux operation continues
 					{
 						validVariable = false;
@@ -886,6 +892,7 @@ int ReadInputFile::handleOperations(ifstream &file, Graph* graph){
 
 					//cout << translatedLine << "\n";
 					newNode.setOperation(inputLine);
+					newNode.setResourceType("Logic");
 					doneWithLine = true;							//valid output
 				}
 			}
