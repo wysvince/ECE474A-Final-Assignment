@@ -27,12 +27,12 @@ int main(int argc, char* argv[]) {
 
 	ifstream inputFilename;
 	ofstream outputFilename;
-	/*
+	
 	// Class objects
 	Variables var;
 	Operations op;
-	//Statements state;
-	ReadInputFile read;*/
+	//Statements state; 
+	ReadInputFile read;
 	WriteOutputFile write;
 	
 	// Testing Graph Class ------------------------
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
 
 	// Get data from input file
 	if (inputFilename.is_open()) {
-		/* Not working for mine so commented for now.
+		/* Not working for mine so commented for now. */
 		cout << "Opened File for read" << endl;								// DEBUGGING (Remove this)
 		
 		// fetching variables from input file
@@ -68,9 +68,22 @@ int main(int argc, char* argv[]) {
 		//cout << "Fetching statements" << endl;
 		//read.fetchStatements(inputFilename, state);
 		//cout << "Fetching statements completed" << endl;					// DEBUGGING (Remove this)
-
+		inputFilename.close();
+		inputFilename.open(argv[1]);
 		read.handleOperations(inputFilename, &graph);
-		*/
+		
+		cout << endl;
+		for (Nodes node : graph.getNodes()) {
+			node.printNode();	//PRINT NODES
+		}
+		cout << "****************************************" << endl;
+		cout << endl << endl;
+
+		cout << endl << "Graph's wait state edges:" << endl;
+		for (Edges edge : graph.getEdges()) {
+			edge.printEdge();
+		}
+
 		// close input file
 		inputFilename.close();
 		cout << "File closed" << endl;										// DEBUGGING (Remove this)
@@ -81,8 +94,8 @@ int main(int argc, char* argv[]) {
 	} // Done: Get data from input file
 
 //////////// Generate graph ////////////////////////////////////////////////////////////////////////////////////////////////
-	// Testing Graph Class -------------------------------
-	cout << "Start Writing Graph" << endl;
+	// Testing Graph Class ------------------------------- 
+/*	cout << "Start Writing Graph" << endl;
 
 	// Init nodes.
 	tempNode.init();
@@ -237,7 +250,7 @@ int main(int argc, char* argv[]) {
 	//int latency = std::stoi(argv[2]);
 	//graph.createALAPSchedule(latency);
 	// Generate List_R Schedule
-	//graph.createListRSchedule(latency);
+	//graph.createListRSchedule(latency);	*/
 
 //////////// Generate states //////////////////////////////////////////////////////////////////////////////////////////
 
