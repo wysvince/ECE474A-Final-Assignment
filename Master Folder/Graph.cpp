@@ -193,18 +193,23 @@ void Graph::createALAPSchedule(int latency){
 			// Find the Edge
 			tempNode = this->nodes.at(endOfPath);
 			tempEdge.init();
-			// Iterate through the node's edge vector to find the next node and schedule the path.
-			for (vector<Edges>::size_type j = 0; j < tempNode.getEdges().size(); j++) {
-				tempEdge = tempNode.getEdges().at(j); // Set a temp edge for ease of reading and programming.
-				endOfPath = tempEdge.getNextNode();
-				if ( endOfPath >= 0 ) {
-					// Found next part of our path.
-					indicies.push_back(endOfPath); // add it to our path vector.
-					j = tempNode.getEdges().size(); // set search index to exit parameter (size of the edge vector in our node). Basically, exit the loop.
-				}
-				else {
-					// End of path found.
-					j = tempNode.getEdges().size(); // set search index to exit parameter (size of the edge vector in our node). Basically, exit the loop.				
+			if (tempNode.getEdges().empty() == true) {
+				endOfPath = -1;
+			}
+			else {
+				// Iterate through the node's edge vector to find the next node and schedule the path.
+				for (vector<Edges>::size_type j = 0; j < tempNode.getEdges().size(); j++) {
+					tempEdge = tempNode.getEdges().at(j); // Set a temp edge for ease of reading and programming.
+					endOfPath = tempEdge.getNextNode();
+					if (endOfPath >= 0) {
+						// Found next part of our path.
+						indicies.push_back(endOfPath); // add it to our path vector.
+						j = tempNode.getEdges().size(); // set search index to exit parameter (size of the edge vector in our node). Basically, exit the loop.
+					}
+					else {
+						// End of path found.
+						j = tempNode.getEdges().size(); // set search index to exit parameter (size of the edge vector in our node). Basically, exit the loop.				
+					}
 				}
 			}
 
