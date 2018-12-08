@@ -46,7 +46,6 @@ unsigned int Graph::getNumNodes() {
 void Graph::addNode(Nodes newNode, int ifStatementLevel, vector<string> conditionVariables) {
 	vector<string> newNodeVars;
 	string recentConditionVar;
-	bool foundConditionalOp = false;
 	bool insideOuterElse = false;
 	bool exitedElse = false;
 	int elseLevel = 0;
@@ -69,7 +68,6 @@ void Graph::addNode(Nodes newNode, int ifStatementLevel, vector<string> conditio
 	cout << newNode.getOperation() << endl;	//Prints all operations for Debugging
 	if (nodes.size() > 1) {
 		for (int j = 0; j < newNodeVars.size(); ++j) {
-			foundConditionalOp = false;
 			insideOuterElse = false;
 			exitedElse = false;
 			for (int i = nodes.size() - 2; i >= 0; i--) {
@@ -90,7 +88,7 @@ void Graph::addNode(Nodes newNode, int ifStatementLevel, vector<string> conditio
 					}
 					if (!(exitedElse && nodes.at(i).getIfStatementLevel() > elseLevel)) { //Make sure we haven't gone back into an "if" thats in parallel with the "else" we're within
 						if (((nodes.at(i).getOutputVariable() == newNodeVars.at(j) || (nodes.at(i).getOutputVariable() == curCondition)) ||	//Checks if using same var, BUT either both within or both not within an else statement
-							((nodes.at(i).getOutputVariable() == recentConditionVar) && !foundConditionalOp)) && //Check if difference in "if" condition dependency	
+							((nodes.at(i).getOutputVariable() == recentConditionVar))) && //Check if difference in "if" condition dependency	
 							!(nodes.at(i).getIfStatementLevel() > ifStatementLevel && newNode.getWithinElse())) {
 							Edges newEdge;
 							newEdge.setNextNode(nodes.at(nodes.size() - 1).getNodeNum());
@@ -143,13 +141,7 @@ void Graph::addNode(Nodes newNode, int ifStatementLevel, vector<string> conditio
 								}
 								edgeCondition += ") {";
 								newEdge.setCondtionalOperation(edgeCondition);
-								//foundConditionalOp = true;
 							}
-							if (nodes.at(i).getWithinElse()) {
-								//foundConditionalOp = true;
-								//stayWithinElse = true;
-							}
-							edges.push_back(newEdge);
 							nodes.at(i).addEdge(newEdge); //adds edge to node pointing to newNode				//FIXME AVOID DUPLICATE EDGES (override edge ==)
 							//break;
 						}
@@ -179,26 +171,31 @@ void Graph::addNode(Nodes newNode, int ifStatementLevel, vector<string> conditio
 				}
 			}	*/
 		//}
+	}//End of adding node/edges
+
+	if (conditionVariables.size() > 0 && asapTime == 0) {	//If nodes have conditions but an asap of 0, then add edge to graph itself
+		Edges newEdge;
+		newEdge.setNextNode(newNode.getNodeNum());
+		newEdge.setPrevNode(-1);
+		
+		string conditionOp = "if (";
+		bool multipleConditions = false;
+		for (string cond : conditionVariables) {
+			if (multipleConditions) {
+				conditionOp += " && " + cond;
+			}
+			else {
+				conditionOp += cond;
+				multipleConditions = true;
+			}
+		}
+		newEdge.setCondtionalOperation(conditionOp);
+		edges.push_back(newEdge);
 	}
+
 	nodes.at(nodes.size() - 1).setAsapTime(asapTime);
-	
 }
 
-//void Graph::calculateWeights(Operations &op)
-//{
-//	int tempWeight = -1;
-//
-//	// Calculate weight by determining type of operation
-//
-//	this->weight = tempWeight;
-//}
-
-//void Graph::setupNodesEdges(ReadInputFile &rif)
-//{	
-//	int tempStateNum = 0;
-//	int tempNumCycles = 0;
-//	string tempOperation = "\0";
-//	for (Operations op : rif.operationList) {
-//		this->nodes.
-//	}
-//}
+void Graph::addEdge(Edges newEdge) {
+	edges.push_back(newEdge);
+}
