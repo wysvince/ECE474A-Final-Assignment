@@ -184,7 +184,7 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 
 	for (vector<Nodes>::size_type k = 0; k < nodes.size(); k++) {
 		if (nodes.at(k).getListR() > numTimes) {
-			numTimes = nodes.at(k).getListR();
+			numTimes = nodes.at(k).getListR() + 1;
 		}
 	}
 
@@ -196,7 +196,7 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	file << "\treg [" << numBits - 1 << ", 0] state;\n" << endl; // total number of states -1 because we're assigning it's binary value.
 	file << "\treg [" << numBits - 1 << ", 0] Wait = " << numBits << "'d0;" << endl;
 	for (int ind = 0; ind < numTimes; ind++) {
-		file << "\treg [" << numBits - 1 << ", 0] s" << ind + 1  << " = " << numBits << "'d" << ind + 1  << ";"<< endl; // + 1 because we're starting at the second point in the binary number.
+		file << "\treg [" << numBits - 1 << ", 0] s" << ind +1 << " = " << numBits << "'d" << ind +1 << ";"<< endl; // + 1 because we're starting at the second point in the binary number.
 	}
 	file << "\treg [" << numBits - 1 << ", 0] Final = " << numBits << "'d" << numTimes + 1 << ";\n" << endl;
 
@@ -206,7 +206,7 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	// Start If
 	file << "\t\tif(Rst == 1'b1)begin" << endl;
 	file << "\t\t\tstate <= Wait;" << endl;
-	file << "\t\tend else\n" << endl; // Start else
+	file << "\t\tend \n\telse begin\n" << endl; // Start else
 
 	// Start Case:
 	file << "\t\tcase(state)" << endl;
@@ -232,26 +232,13 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	file << "\t\t\tend\n" << endl;													// End Default.
 
 	// End Case:
-	file << "\t\tendcase" << endl;
+	file << "\t\tendcase" << endl << "\tend" << endl;
 
 	// End always @ (posedge Clk):
 	file << "\tend" << endl;
 
 	// End the module.
 	file << "endmodule" << endl;
-
-	// Testing --------------------------------------------
-	file << "\n\n// Just For testing will remove later:" << endl;
-	file << "Graph: \n" << "Weight: " << weight << endl;
-	for (vector<Nodes>::size_type i = 0; i < nodes.size(); i++) {
-		file << "Node: " << i + 1 << endl;
-		file << "Operation: " << nodes.at(i).getOperation() << endl;
-		file << "ALAP Time: " << nodes.at(i).getALAP() << endl;
-		file << "ASAP Time: " << nodes.at(i).getASAP() << endl;
-		file << "\n";
-	}
-	file << "\n\n";
-	// ----------------------------------------------------
 }
 
 
@@ -267,11 +254,11 @@ void WriteOutputFile::writeStates(ofstream & file, vector <Nodes> nodes, int num
 	bool hasElse = false;
 
 	while (tempNum <= numTimes) {
-		// Loop through the nodes vector to find nodes that should exicute in this time stamp.
+		// Loop through the nodes vector to find nodes that should execute in this time stamp.
 		for (vector<Nodes>::size_type nd = 0; nd < nodes.size(); nd++) {
 			// Check if current node exicutes in this time stamp
-			if (nodes.at(nd).getListR() == tempNum) {
-				tempNodes.push_back(nodes.at(nd)); // add it to our exicute vector.
+			if (nodes.at(nd).getListR() == (tempNum - 1)) {
+				tempNodes.push_back(nodes.at(nd)); // add it to our execute vector.
 				tempEdges = nodes.at(nd).getEdges();
 				for (vector<Edges>::size_type eg = 0; eg < tempEdges.size(); eg++) {
 					if (!(tempEdges.at(eg).getConditionalOperation().empty())) {
