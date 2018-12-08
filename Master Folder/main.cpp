@@ -44,10 +44,6 @@ int main(int argc, char* argv[]) {
 
 
 	inputFilename.open(argv[1]);
-	cout << "argv0:\t" << argv[0] << endl;									// DEBUGGING (Remove this)
-	cout << "argv1:\t" << argv[1] << endl;									// DEBUGGING (Remove this)
-	cout << "argv2:\t" << argv[2] << endl;									// DEBUGGING (Remove this)
-	cout << "argv3:\t" << argv[3] << endl;									// DEBUGGING (Remove this)
 
 	// Get data from input file
 	if (inputFilename.is_open()) {
@@ -56,45 +52,28 @@ int main(int argc, char* argv[]) {
 		
 		inputFilename.close();
 		inputFilename.open(argv[1]);
-		read.handleOperations(inputFilename, &graph);
-		
-		cout << endl;
-		for (Nodes node : graph.getNodes()) {
-			node.printNode();	//PRINT NODES
+		if (read.handleOperations(inputFilename, &graph) == -2) {
+			cout << "Invalid variable" << endl;
+			return -1;
 		}
-		cout << "****************************************" << endl;
-		cout << endl << endl;
 
-		cout << endl << "Graph's wait state edges:" << endl;
-		for (Edges edge : graph.getEdges()) {
-			edge.printEdge();
+		if (graph.getNodes().size() == 0) {
+			cout << "Could not create graph" << endl;
+			return -1;
 		}
-		cout << "****************************************" << endl;
 
 		//ALAP
 		graph.createUnscheduledList();
-		cout << endl << "After ALAP scheduling" << endl;
+
 		int latency = std::stoi(argv[2]);
 		graph.createALAPSchedule(latency);
-		for (Nodes node : graph.getNodes()) {
-			node.printNode();	//PRINT NODES
-		}
-		cout << "****************************************" << endl;
-		cout << endl;	//END ALAP
 
-		cout << "Creating ListR Start:" << endl;
 		if (graph.createListRSchedule(latency) == false) {
 			return -1;
-		}
-		cout << "Ending ListR" << endl;
-
-		for (Nodes node : graph.getNodes()) {
-			cout << "Node" << node.getNodeNum() << " list_R time: " << node.getListR() << endl;
 		}
 
 		// close input file
 		inputFilename.close();
-		cout << "File closed" << endl;										// DEBUGGING (Remove this)
 	}
 	else {	// Error!!
 		cout << "Error: Input file doesn't exists." << endl;
@@ -120,6 +99,6 @@ int main(int argc, char* argv[]) {
 		return -1;
 	}// Done: Generate output file 
 
-	return 0;
+	return 1;
 }// end of main function
 

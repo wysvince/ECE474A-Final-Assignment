@@ -620,7 +620,7 @@ int ReadInputFile::handleOperations(ifstream &file, Graph* graph){
 			}
 			if (!validVariable) {
 				cout << "If statement \"" << inputLine << "\" has invalid condition variable: " << token << endl;
-				return -1;																			//ERROR
+				return -2;																			//ERROR
 			}
 
 			insideIfStatements++;		
@@ -643,7 +643,7 @@ int ReadInputFile::handleOperations(ifstream &file, Graph* graph){
 		else if (!doneWithLine && token.find("for") != string::npos) {	//FIXME 
 			braceOpener.push_back("for");
 			cout << "FIXME: Loops are not handled correctly. Exiting with error" << endl;
-			return -1;
+			return -2;
 		}
 		if (!doneWithLine) {
 			for (unsigned int i = 0; i < outputList.size(); ++i)
@@ -671,7 +671,7 @@ int ReadInputFile::handleOperations(ifstream &file, Graph* graph){
 			if (!validVariable)
 			{
 				//cout << "cannot assign this variable: " << token << "\t (must be output or wire)" << '\n';	//ERROR
-				return -1;																					//ERROR
+				return -2;																					//ERROR
 			}
 
 			inputLineStream >> token;
@@ -724,7 +724,7 @@ int ReadInputFile::handleOperations(ifstream &file, Graph* graph){
 			if (!validVariable)
 			{
 				//cout << "Could not identity input/wire variable: " << token << " \n";	
-				return -1;																//ERROR
+				return -2;																//ERROR
 			}
 
 			//identify operator
@@ -786,7 +786,7 @@ int ReadInputFile::handleOperations(ifstream &file, Graph* graph){
 				if (!validVariable)
 				{
 					//cout << "Invalid variable: " << token2 << "\n";	//ERROR
-					return -1;											//ERROR
+					return -2;											//ERROR
 				}
 			}
 				//identify operator

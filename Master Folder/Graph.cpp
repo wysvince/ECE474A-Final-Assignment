@@ -486,7 +486,7 @@ void Graph::addNode(Nodes newNode, int ifStatementLevel, vector<string> conditio
 	}
 	newNode.setIfStatementLevel(ifStatementLevel);
 	nodes.push_back(newNode);
-	cout << newNode.getOperation() << endl;	//Prints all operations for Debugging
+	//cout << newNode.getOperation() << endl;	//Prints all operations for Debugging
 	if (nodes.size() > 1) {
 		for (int j = 0; j < newNodeVars.size(); ++j) {
 			insideOuterElse = false;
@@ -521,24 +521,6 @@ void Graph::addNode(Nodes newNode, int ifStatementLevel, vector<string> conditio
 							}
 							if ((nodes.at(i).getIfStatementLevel() < ifStatementLevel) || (nodes.at(i).getIfStatementLevel() == ifStatementLevel && newNode.getWithinElse() && !nodes.at(i).getWithinElse()) ) {		//Sets edge conditional if needed
 								string edgeCondition = "if (";
-								/*if (nodes.at(i).hasConditionalEdge()) {	//if edge condition already exists, may need else if
-									for (Edges curEdge : nodes.at(i).getEdges()) {
-										if (!curEdge.getConditionalOperation().empty()) {
-											if (nodes.at(curEdge.getNextNode()).getAsapTime() == asapTime) {	//Find if edge has same conditionalOperation, there must be if (not an else if)
-												edgeCondition = "if (";
-												break;
-											}
-											else {
-												edgeCondition = "else if (";
-												break;
-											}
-										}
-									}
-								}
-								else {
-									edgeCondition = "if (";
-								}*/
-
 								int x = 0;
 								int limit = conditionVariables.size() - (ifStatementLevel - nodes.at(i).getIfStatementLevel());
 								if (newNode.getWithinElse()) {
@@ -571,28 +553,6 @@ void Graph::addNode(Nodes newNode, int ifStatementLevel, vector<string> conditio
 				}
 			}
 		}
-		//Check if else is needed 
-		//if (nodes.at(nodes.size() - 2).getIfStatementLevel() > ifStatementLevel/* && !newNode.getWithinElse()*/) {
-		/*	for (int i = nodes.size() - 2; i >= 0; i--) {
-				if (nodes.at(i).getIfStatementLevel() == ifStatementLevel && newNode.getWithinElse()) {
-					if (nodes.at(i).hasConditionalEdge()) {
-						if (nodes.at(i).hasElseEdge()) {
-							break;
-						}
-						Edges newEdge;
-						newEdge.setNextNode(nodes.at(nodes.size() - 1).getNodeNum());
-						newEdge.setPrevNode(nodes.at(i).getNodeNum());
-						newEdge.setCondtionalOperation("else {");
-						edges.push_back(newEdge);
-						nodes.at(i).addEdge(newEdge);
-						break;
-					}
-				}
-				if (nodes.at(i).getIfStatementLevel() < ifStatementLevel) {	//exited current if level without needing an else
-					break;
-				}
-			}	*/
-		//}
 	}//End of adding node/edges
 
 	if (conditionVariables.size() > 0 && asapTime == 0) {	//If nodes have conditions but an asap of 0, then add edge to graph itself
