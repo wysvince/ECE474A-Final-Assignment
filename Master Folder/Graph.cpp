@@ -181,7 +181,7 @@ void Graph::createALAPSchedule(int latency){
 		 */
 		for (vector<Nodes>::size_type i = 0; i < this->nodes.size(); i++) {
 			curALAP = this->nodes.at(i).getALAP();
-			if (curALAP < 0) {
+			if (curALAP <= 0) {
 				indicies.push_back(i);
 				i = this->nodes.size();
 			}
