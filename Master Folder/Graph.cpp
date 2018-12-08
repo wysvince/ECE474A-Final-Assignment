@@ -78,132 +78,6 @@ vector<int> Graph::getListRSchedule()
 // latency constrained, considers minimum resource
 void Graph::createListRSchedule(int latency)
 {
-	/*  Not actually working commenting out for now.
-	int numALU = 1;						// Number of ALUs
-	int numMUL = 1;						// Number of Multipliers
-	int numLog = 1;						// Number of logic units
-
-	int schALU = 0;
-	int schMUL = 0;
-	int schLog = 0;
-
-	// Graph variables.
-	Edges tempEdge;						// Temporary Edge.
-	Nodes tempNode;						// Temporary node to save nodes if needed.
-	int size = this->nodes.size();		// Size of the nodes vector
-
-	int curALAP;						// Current ALAP value.
-	int curASAP;						// Current ASAP value.
-	int tempSlack;
-
-	bool isALU = false;					// If it's a Arithmetic unit
-	bool isMUL = false;					// If it's a Multiplier
-	bool isLog = false;					// If it's a logic unit
-
-	// Indicies variables.
-	vector <int> U;						// Holds all indicies to be checked.
-	vector <int> L;						// Holds all slacks to be checked.
-	vector <int> S;						// Holds all nodes to be scheduled.
-	int index = 0;						// Index of current node in nodes vector.
-	int endOfPath = 0;					// Last index in the path, will keep setting it until -1 to find the full path. 
-
-	// Number of iterated edges:
-	int numItEdge = 0;					// Increments when we find an edge to make sure we hit every edge in the graph, otherwise we have errors with our timing in specific situations.
-	int tempInd = 0;
-	int curTime = 0;
-
-	// Cycle variables.
-	int lat = latency;					// Saves the current latency. (set to max latency at start)
-	int numCycles = 0;					// Number of cycles current node uses.
-
-	// End condition.
-	int numSchedNode = 0;				// Total scheduled nodes (end condition for loop).
-
-	while (numSchedNode < size) {
-		// Find members of U.
-		for (vector<Nodes>::size_type u = 0; u < this->nodes.size(); u++) {
-			curASAP = nodes.at(u).getASAP();
-			if (curASAP == 0) {
-				U.push_back(u);
-			}
-			else if(curASAP == curTime){
-				U.push_back(u);
-			}
-		}
-
-		// Find slack of U memebers.
-		for (vector<int>::size_type l = 0; l < U.size(); l++) {
-			curALAP = nodes.at(U.at(l)).getALAP();
-			L.push_back(curALAP - curTime);
-		}
-
-		tempSlack = 99;
-
-		// Find scheduled nodes.
-		for (vector<int>::size_type s = 0; s < U.size(); s++) {
-			tempNode = nodes.at(U.at(s));
-
-			// Get the type of operation.
-			if (tempNode.getOperation().find("+-")) {
-				bool isALU = true;
-				bool isMUL = false;
-				bool isLog = false;
-			}
-			else if (tempNode.getOperation().find("*")) {
-				bool isALU = false;
-				bool isMUL = true;
-				bool isLog = false;
-			}
-			else {
-				bool isALU = false;
-				bool isMUL = false;
-				bool isLog = true;
-			}
-
-			if (L.at(s) == 0) {
-				S.push_back(U.at(s));
-				if (isALU) {
-					numALU++;
-				}
-				else if (isMUL) {
-					numMUL++;
-				}
-				else if (isLog) {
-					numLog++;
-				}
-			}
-			else if (isALU && schALU < numALU) {
-				S.push_back(U.at(s));
-				U.erase(U.begin() + s);
-				L.erase(U.begin() + s);
-				schALU++;
-			}
-			else if (isMUL && schMUL < numMUL) {
-				S.push_back(U.at(s));
-				U.erase(U.begin() + s);
-				L.erase(U.begin() + s);
-				schMUL++;
-			}
-			else if (isLog && schLog < numLog) {
-				S.push_back(U.at(s));
-				U.erase(U.begin() + s);
-				L.erase(U.begin() + s);
-				schLog++;
-			}
-		}
-
-		// Now Schedule 
-		for (vector<int>::size_type ind = 0; ind < S.size(); ind++) {
-			nodes.at(S.at(ind)).setListR(curTime);
-			numSchedNode++;
-		}
-
-		S.clear();
-		curTime++;
-	}
-	*/
-
-// Trying Something:
 	//vector<int>::iterator it;
 	vector<Nodes> tempList = nodes;
 	int tempSlack;
@@ -277,7 +151,7 @@ void Graph::createListRSchedule(int latency)
 		// In Time Cycle 1
 		if (cycle == 1) {
 			for (unsigned int i = 0; i < nodes.size(); i++) {
-				if (nodes.at(i).getASAP() == 0) {
+				if (nodes.at(i).getASAP() == 1) {
 					tempInt = nodes.at(i).getNodeNum();
 					tempNode = returnNode(tempInt);
 					nodeIndex = returnNodeIndex(tempInt);
@@ -410,7 +284,6 @@ void Graph::createListRSchedule(int latency)
 		cout << "Node: " << nodes.at(i).getNodeNum() << "\tListR time = " << nodes.at(i).getListR() << endl;
 	}
 		cout << endl;
-
 }//gitpush _ 12/6 8:11PM
 
 bool Graph::foundDependency(int nodeNum) {
