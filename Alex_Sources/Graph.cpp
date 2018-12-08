@@ -131,7 +131,7 @@ void Graph::addNode(Nodes newNode, int ifStatementLevel, vector<string> conditio
 									else {
 										edgeCondition += conditionVariables.at(y);
 									}
-									if (conditionVariables.at(y).find("!") != string::npos) {	//else conditions don't increment ifstatement level, therefore we need to decrement our limit to account for this
+									if (conditionVariables.at(y).find("!") != string::npos && y != (conditionVariables.size() - 1)) {	//else conditions don't increment ifstatement level, therefore we need to decrement our limit to account for this
 										limit--;
 										if (limit < 0) {
 											break;
@@ -189,6 +189,7 @@ void Graph::addNode(Nodes newNode, int ifStatementLevel, vector<string> conditio
 				multipleConditions = true;
 			}
 		}
+		conditionOp += ") {";
 		newEdge.setCondtionalOperation(conditionOp);
 		edges.push_back(newEdge);
 	}

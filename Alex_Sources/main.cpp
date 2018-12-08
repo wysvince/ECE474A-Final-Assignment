@@ -127,6 +127,7 @@ int main(int argc, char* argv[]) {
 		for (Nodes node : graph.getNodes()) {
 			node.printNode();	//PRINT NODES
 		}
+		cout << "****************************************" << endl;
 		cout << endl << endl;
 
 		cout << endl << "Graph's wait state edges:" << endl;
