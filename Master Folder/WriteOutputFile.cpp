@@ -214,7 +214,7 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 	file << "\treg [" << numBits - 1 << " : 0] Final = " << numBits << "'d" << numTimes + 1 << ";\n" << endl;
 
 	// Start always @ (posedge Clk):
-	file << "\talways @ (posedge Clk) begin : FSM" << endl;
+	file << "\talways @ (posedge Clk) begin" << endl;
 	
 	// Start If
 	file << "\t\tif(Rst == 1'b1)begin" << endl;
