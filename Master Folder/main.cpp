@@ -87,6 +87,7 @@ int main(int argc, char* argv[]) {
 
 		// DEBUG ONLY ----------------------------------
 		write.createHLSMHeader(outputFilename);
+		write.writeDatatypeInstantiation(outputFilename, read);
 		write.writeGraph(outputFilename, graph);
 		// DEBUG ONLY ----------------------------------
 

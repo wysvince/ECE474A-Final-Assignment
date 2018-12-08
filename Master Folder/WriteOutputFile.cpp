@@ -34,10 +34,10 @@ string WriteOutputFile::retrieveDatawidth(int width, string datatype) {
 	}
 	else if (datatype.compare("register") == 0) {
 		if (width == 1) {
-			str = "\tregister ";
+			str = "\treg ";
 		}
 		else {
-			str += "\tregister [" + to_string(width) + ":0] ";
+			str += "\treg [" + to_string(width) + ":0] ";
 		}
 	}
 	else {
