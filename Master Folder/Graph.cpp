@@ -76,7 +76,7 @@ vector<int> Graph::getListRSchedule()
 //Methods
 
 // latency constrained, considers minimum resource
-void Graph::createListRSchedule(int latency)
+bool Graph::createListRSchedule(int latency)
 {
 	int numMultipliers = 1;
 	int usedMultipliers = 0;
@@ -204,10 +204,13 @@ void Graph::createListRSchedule(int latency)
 				++usedMultipliers;
 			}
 		}
-
 		++currentTime;
+		if (currentTime > latency && nodesLeftToSchedule > 0) {
+			cout << "Not enough time to schedule" << endl;
+			return false;
+		}
 	}
-	
+	return true;
 }//END LIST_R
 
 bool Graph::foundDependency(int nodeNum) {

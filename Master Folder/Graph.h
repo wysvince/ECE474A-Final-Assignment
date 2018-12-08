@@ -53,7 +53,7 @@ public:
 	// void generateALAPTimeTable(); // unsure where to place this yet
 	// void generateList_RSchedule(); // unsure where to plae this yet
 	//void calculateWeights(Operations &op);
-	void createListRSchedule(int latency);
+	bool createListRSchedule(int latency);
 	Nodes findLowestSlack(int);
 	void createUnscheduledList();
 	void createALAPSchedule(int latency);
