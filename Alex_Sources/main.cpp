@@ -128,6 +128,11 @@ int main(int argc, char* argv[]) {
 		}
 		cout << endl << endl;
 
+		cout << endl << "Graph's wait state edges:" << endl;
+		for (Edges edge : graph.getEdges()) {
+			edge.printEdge();
+		}
+		
 		// close output file
 		outputFilename.close();
 		cout << "File closed" << endl;										// DEBUGGING (Remove this)

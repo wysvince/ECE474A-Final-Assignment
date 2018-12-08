@@ -39,6 +39,7 @@ public:
 
 	//methods
 	void addNode(Nodes newNode, int ifStatementLevel, vector<string> conditionVariables);
+	void addEdge(Edges newEdge);
 	
 
 	// void generateALAPTimeTable(); // unsure where to place this yet
