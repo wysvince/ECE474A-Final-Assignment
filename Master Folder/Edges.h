@@ -5,6 +5,7 @@
 #include "Nodes.h"
 
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -32,6 +33,9 @@ public:
 	string getConditionalOperation();
 	int getPrevNode();
 	int getNextNode();
+	
+	//Methods
+	void printEdge();
 };
 
 #endif // !EDGES_H

@@ -22,6 +22,7 @@ int main(int argc, char* argv[]) {
 	if (argc != 4) {
 		cout << "ERROR: Incorrect arguments." << endl;
 		cout << "Correct argumets:\thlsyn cFile latency verilogFile" << endl;
+		return -1;
 	}
 
 	ifstream inputFilename;
@@ -99,7 +100,7 @@ int main(int argc, char* argv[]) {
 	tempEdge.setNextNode(3);
 	tempEdge.setCondtionalOperation("if ( d ) {");
 	tempNode.addEdge(tempEdge);
-	graph.addNode(tempNode);
+	graph.addNode(tempNode, 0, vector<string>());
 
 	// Init nodes.
 	tempNode.init();
@@ -114,7 +115,7 @@ int main(int argc, char* argv[]) {
 	tempEdge.setPrevNode(-1);
 	tempEdge.setNextNode(3);
 	tempNode.addEdge(tempEdge);
-	graph.addNode(tempNode);
+	graph.addNode(tempNode, 0, vector<string>());
 
 	// Init nodes.
 	tempNode.init();
@@ -129,7 +130,7 @@ int main(int argc, char* argv[]) {
 	tempEdge.setPrevNode(1);
 	tempEdge.setNextNode(4);
 	tempNode.addEdge(tempEdge);
-	graph.addNode(tempNode);
+	graph.addNode(tempNode, 0, vector<string>());
 
 	// Init nodes.
 	tempNode.init();
@@ -143,7 +144,7 @@ int main(int argc, char* argv[]) {
 	tempNode.setNodeNum(4);
 	tempEdge.setPrevNode(3);
 	tempNode.addEdge(tempEdge);
-	graph.addNode(tempNode);
+	graph.addNode(tempNode, 0, vector<string>());
 
 	// Init nodes.
 	tempNode.init();
@@ -158,7 +159,7 @@ int main(int argc, char* argv[]) {
 	tempEdge.setPrevNode(4);
 	tempEdge.setNextNode(5);
 	tempNode.addEdge(tempEdge);
-	graph.addNode(tempNode);
+	graph.addNode(tempNode, 0, vector<string>());
 
 	// Init nodes.
 	tempNode.init();
@@ -172,7 +173,7 @@ int main(int argc, char* argv[]) {
 	tempNode.setNodeNum(6);
 	tempEdge.setPrevNode(5);
 	tempNode.addEdge(tempEdge);
-	graph.addNode(tempNode);
+	graph.addNode(tempNode, 0, vector<string>());
 
 	// Init nodes.
 	tempNode.init();

@@ -11,6 +11,7 @@ class Nodes;
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -44,6 +45,7 @@ public:
 	vector<Nodes> getNodes();
 	vector<Edges> getEdges();
 	int getWeight();
+	int getNumNodes();
 	vector<int> getAlapSchedule();
 	vector<int> getListRSchedule();
 
@@ -56,7 +58,7 @@ public:
 	void createUnscheduledList();
 	void createALAPSchedule(int latency);
 	void checkALAP(int latency);
-	void addNode(Nodes newNode);
+	void addNode(Nodes newNode, int ifStatementLevel, vector<string> conditionVariables);
 	void addEdges(Edges newEdge);
 	Nodes returnNode(int num);
 	int returnNodeIndex(int num);

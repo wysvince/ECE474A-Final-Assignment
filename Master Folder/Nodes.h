@@ -24,6 +24,9 @@ private:
 	int slack;
 	int cycleCount;
 	bool checked;
+	vector<string> variablesInvolved; //First variable is always the output
+	int ifStatementLevel;
+	bool withinElse;
 
 public:
 	// constructor
@@ -42,6 +45,9 @@ public:
 	void setListR(int time);
 	void init();
 	void setChecked(bool);
+	void setIfStatementLevel(int level);
+	void setVariablesInvolved(vector<string> vbs);
+	void setWithinElse(bool b);
 
 	//getters
 	int getNodeNum();
@@ -54,10 +60,17 @@ public:
 	int getASAP();
 	int getListR();
 	int getChecked();
+	int getIfStatementLevel();
+	vector<string> getVariablesInvolved();
+	string getOutputVariable();
+	bool getWithinElse();
 
 	//Methods
 	void addEdge(Edges newEdge);
 	int calculateSlack(int alapTime, int currCycle);
+	void printNode();
+	bool hasConditionalEdge();
+	bool hasElseEdge();
 
 };
 

@@ -48,3 +48,12 @@ int Edges::getPrevNode() {
 int Edges::getNextNode() {
 	return this->nextNode;
 }
+
+//Methods
+void Edges::printEdge() {
+	//cout << "\tPrevious: Node-" << prevNode->getStateNum() << endl;
+	cout << "\tNext Node:    Node " << nextNode << endl;
+	if (!conditionalOperation.empty()) {
+		cout << "\t    Condition:    " << conditionalOperation << endl;
+	}
+}
