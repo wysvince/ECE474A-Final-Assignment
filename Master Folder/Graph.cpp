@@ -545,7 +545,7 @@ void Graph::addNode(Nodes newNode, int ifStatementLevel, vector<string> conditio
 								edgeCondition += ") {";
 								newEdge.setCondtionalOperation(edgeCondition);
 							}
-							edges.push_back(newEdge);
+							//edges.push_back(newEdge);
 							nodes.at(i).addEdge(newEdge); //adds edge to node pointing to newNode				//FIXME AVOID DUPLICATE EDGES (override edge ==)
 							//break;
 						}
