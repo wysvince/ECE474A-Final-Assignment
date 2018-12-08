@@ -247,10 +247,11 @@ int main(int argc, char* argv[]) {
 	// ----------------------------------------------------
 	// Done: Generate graph
 	// Generate ALAP Schedule
-	//int latency = std::stoi(argv[2]);
-	//graph.createALAPSchedule(latency);
 	// Generate List_R Schedule
 	//graph.createListRSchedule(latency);	*/
+	int latency = std::stoi(argv[2]);
+	graph.createUnscheduledList();
+	graph.createALAPSchedule(latency);
 
 //////////// Generate states //////////////////////////////////////////////////////////////////////////////////////////
 
