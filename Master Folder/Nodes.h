@@ -6,6 +6,7 @@
 
 #include <string> 
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -73,7 +74,7 @@ public:
 
 	//Methods
 	// ADDED in from Alex S's Read file. ----------------
-	//void printNode();
+	void printNode();
 	bool hasConditionalEdge();
 	bool hasElseEdge();
 	//  -------------------------------------------------

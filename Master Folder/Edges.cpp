@@ -25,7 +25,6 @@ void Edges::setNextNode(int newNextNode) {
 	this->nextNode = newNextNode;
 }
 
-
 void Edges::init() {
 	this->conditionalOperation = "";
 	this->prevNode = -1;
@@ -43,4 +42,13 @@ int Edges::getPrevNode() {
 
 int Edges::getNextNode() {
 	return this->nextNode;
+}
+
+//Methods
+void Edges::printEdge() {
+	//cout << "\tPrevious: Node-" << prevNode->getStateNum() << endl;
+	cout << "\tNext Node:    Node " << nextNode << endl;
+	if (!conditionalOperation.empty()) {
+		cout << "\t    Condition:    " << conditionalOperation << endl;
+	}
 }

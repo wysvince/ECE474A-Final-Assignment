@@ -177,7 +177,7 @@ bool Nodes::hasElseEdge() {
 	return false;
 }
 
-/*
+
 void Nodes::printNode() {
 	int i = 1;
 	cout << "****************************************" << endl;
@@ -197,7 +197,7 @@ void Nodes::printNode() {
 		cout << "\tNo Edges" << endl;
 	}
 }
-*/
+
 
 // ----------------------------------------------------------------------------------
 

@@ -72,6 +72,17 @@ int main(int argc, char* argv[]) {
 		inputFilename.open(argv[1]);
 
 		read.handleOperations(inputFilename, &graph);
+		cout << endl;
+		for (Nodes node : graph.getNodes()) {
+			node.printNode();    //PRINT NODES
+		}
+		cout << "**" << endl;
+		cout << endl << endl;
+
+		cout << endl << "Graph's wait state edges:" << endl;
+		for (Edges edge : graph.getEdges()) {
+			edge.printEdge();
+		}
 
 		// fetching statements from input file
 		//cout << "Fetching statements" << endl;
