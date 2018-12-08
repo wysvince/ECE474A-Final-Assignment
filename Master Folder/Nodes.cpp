@@ -13,6 +13,23 @@ Nodes::Nodes(int newStateNum, Edges newEdges, int newNumCycles, string op) {
 }
 
 // setters
+// ADDED in from Alex S's Read file. ------------------------------------------------
+void Nodes::setNodeNum(int newStateNum) {
+	this->nodeNum = newStateNum;
+}
+
+void Nodes::setIfStatementLevel(int level) {
+	this->ifStatementLevel = level;
+}
+
+void Nodes::setVariablesInvolved(vector<string> vbs) {
+	variablesInvolved = vbs;
+}
+
+void Nodes::setWithinElse(bool b) {
+	withinElse = b;
+}
+// ----------------------------------------------------------------------------------
 void Nodes::setStateNum(int newStateNum) {
 	this->stateNum = newStateNum;
 }
@@ -66,6 +83,27 @@ void Nodes::init() {
 }
 
 // getters
+// ADDED in from Alex S's Read file. ------------------------------------------------
+int Nodes::getNodeNum() {
+	return this->nodeNum;
+}
+
+int Nodes::getIfStatementLevel() {
+	return ifStatementLevel;
+}
+
+vector<string> Nodes::getVariablesInvolved() {
+	return variablesInvolved;
+}
+
+string Nodes::getOutputVariable() {
+	return variablesInvolved.at(0);
+}
+
+bool Nodes::getWithinElse() {
+	return withinElse;
+}
+// ----------------------------------------------------------------------------------
 int Nodes::getStateNum() {
 	return this->stateNum;
 }
@@ -105,10 +143,63 @@ int Nodes::getListR() {
 }
 
 //Methods
-
+// ADDED in from Alex S's Read file. ------------------------------------------------
 void Nodes::addEdge(Edges newEdge) {
+	for (Edges edge : edges) {
+		if (edge.getNextNode() == newEdge.getNextNode()) {
+			if (edge.getConditionalOperation().empty() && !newEdge.getConditionalOperation().empty()) {
+				edge.setCondtionalOperation(newEdge.getConditionalOperation());
+			}
+			return;
+		}
+	}
+
 	edges.push_back(newEdge);
 }
+
+bool Nodes::hasConditionalEdge() {
+	for (Edges edge : edges) {
+		if (!edge.getConditionalOperation().empty()) {//if edge condition is not empty
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Nodes::hasElseEdge() {
+	for (Edges edge : edges) {
+		if (!edge.getConditionalOperation().empty()) {//if edge condition is not empty
+			if (edge.getConditionalOperation().find("else {") != string::npos) { //token.find("if") != string::npos
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+/*
+void Nodes::printNode() {
+	int i = 1;
+	cout << "****************************************" << endl;
+	cout << "Node: " << nodeNum << endl;
+	cout << "Operation: " << operation << endl;
+	cout << "ASAP: " << asapTime << endl;
+	cout << "\tEdges\t" << endl;
+	cout << "\t------------------------\t" << endl;
+	if (edges.size() > 0) {
+		for (Edges edge : edges) {
+			cout << i << "." << endl;
+			edge.printEdge();
+			i++;
+		}
+	}
+	else {
+		cout << "\tNo Edges" << endl;
+	}
+}
+*/
+
+// ----------------------------------------------------------------------------------
 
 void Nodes::calculateSlack(int alapTime, int currCycle)
 {

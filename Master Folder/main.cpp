@@ -16,10 +16,10 @@ using namespace std;
 
 // Testing Functions -------------------------------------------------------
 // The Init of functions.
-void setError(Nodes tempNode, Edges tempEdge, Graph & graph);
-void setHLS8(Nodes tempNode, Edges tempEdge, Graph & graph);
-void setIf3(Nodes tempNode, Edges tempEdge, Graph & graph);
-void setLatHLS4(Nodes tempNode, Edges tempEdge, Graph & graph);
+//void setError(Nodes tempNode, Edges tempEdge, Graph & graph);
+//void setHLS8(Nodes tempNode, Edges tempEdge, Graph & graph);
+//void setIf3(Nodes tempNode, Edges tempEdge, Graph & graph);
+//void setLatHLS4(Nodes tempNode, Edges tempEdge, Graph & graph);
 // --------------------------------------------------------------------------
 
 //////// F U N C T I O N   M A I N ////////////////////////////
@@ -33,12 +33,12 @@ int main(int argc, char* argv[]) {
 
 	ifstream inputFilename;
 	ofstream outputFilename;
-	/*
+	
 	// Class objects
 	Variables var;
 	Operations op;
 	//Statements state;
-	ReadInputFile read;*/
+	ReadInputFile read;
 	WriteOutputFile write;
 	
 	// Testing Graph Class ------------------------
@@ -57,9 +57,8 @@ int main(int argc, char* argv[]) {
 
 	// Get data from input file
 	if (inputFilename.is_open()) {
-		/* Not working for mine so commented for now.
 		cout << "Opened File for read" << endl;								// DEBUGGING (Remove this)
-		
+
 		// fetching variables from input file
 		cout << "Fetching variables" << endl;								// DEBUGGING (Remove this)
 		read.fetchVariables(inputFilename, var);
@@ -67,19 +66,21 @@ int main(int argc, char* argv[]) {
 
 		// fetching operations from input file
 		cout << "Fetching operations" << endl;
-		read.fetchOperations(inputFilename, op);
+		// read.fetchOperations(inputFilename, op);
 		cout << "Fetching operations completed" << endl;					// DEBUGGING (Remove this)
-		
+		inputFilename.close();
+		inputFilename.open(argv[1]);
+
+		read.handleOperations(inputFilename, &graph);
+
 		// fetching statements from input file
 		//cout << "Fetching statements" << endl;
 		//read.fetchStatements(inputFilename, state);
 		//cout << "Fetching statements completed" << endl;					// DEBUGGING (Remove this)
 
-		read.handleOperations(inputFilename, &graph);
-		*/
 		// close input file
 		inputFilename.close();
-		cout << "File closed" << endl;										// DEBUGGING (Remove this)
+		cout << "File closed" << endl;												// DEBUGGING (Remove this)
 	}
 	else {	// Error!!
 		cout << "Error: Input file doesn't exists." << endl;
@@ -92,7 +93,7 @@ int main(int argc, char* argv[]) {
 
 	//setError(tempNode, tempEdge, graph);
 	//setHLS8(tempNode, tempEdge, graph);
-	setIf3(tempNode, tempEdge, graph);
+	//setIf3(tempNode, tempEdge, graph);
 
 	cout << "Graph Written" << endl;
 	// End of Test graph writting.
@@ -146,7 +147,7 @@ int main(int argc, char* argv[]) {
 }// end of main function
 
 // Adding some test functions to make testing a little easier...
-
+/*
 void setError(Nodes tempNode, Edges tempEdge, Graph & graph) {
 
 	// Init nodes.
@@ -686,3 +687,4 @@ void setIf3(Nodes tempNode, Edges tempEdge, Graph & graph) {
 void setLatHLS4(Nodes tempNode, Edges tempEdge, Graph & graph) {
 
 }
+*/

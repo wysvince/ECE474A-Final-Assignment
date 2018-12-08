@@ -14,6 +14,12 @@ class Edges;
 class Nodes {
 
 private:
+	// ADDED in from Alex S's Read file. ----------------------------------
+	int nodeNum;
+	int ifStatementLevel;
+	bool withinElse;
+	vector<string> variablesInvolved; //First variable is always the output
+	//  -------------------------------------------------------------------
 	int stateNum;
 	vector<Edges> edges;
 	int numCycles;
@@ -30,6 +36,12 @@ public:
 	Nodes(int newStateNum, Edges newEdges, int newNumCycles, string op);
 
 	//setters
+	// ADDED in from Alex S's Read file. ----------------
+	void setNodeNum(int newStateNum);
+	void setIfStatementLevel(int level);
+	void setVariablesInvolved(vector<string> vbs);
+	void setWithinElse(bool b);
+	//  -------------------------------------------------
 	void setStateNum(int newStateNum);
 	void setEdges(Edges newEdges);
 	void setNumCycles(int newNumCycles);
@@ -42,6 +54,13 @@ public:
 	void init();
 
 	//getters
+	// ADDED in from Alex S's Read file. ----------------
+	int getNodeNum();
+	int getIfStatementLevel();
+	vector<string> getVariablesInvolved();
+	string getOutputVariable();
+	bool getWithinElse();
+	//  -------------------------------------------------
 	int getStateNum();
 	vector<Edges> getEdges();
 	int getNumCycles();
@@ -53,7 +72,12 @@ public:
 	int getListR();
 
 	//Methods
-	void addEdge(Edges newEdge);
+	// ADDED in from Alex S's Read file. ----------------
+	//void printNode();
+	bool hasConditionalEdge();
+	bool hasElseEdge();
+	//  -------------------------------------------------
+	void addEdge(Edges newEdge);		// Modified with Alex S's code.
 	void calculateSlack(int alapTime, int currCycle);
 
 };

@@ -2,7 +2,7 @@
 #ifndef READINPUTFILE_H
 #define READINPUTFILE_H
 
-#include "Variables.h"
+#include "Variables.h" 
 #include "Operations.h"
 #include "Graph.h"
 
@@ -20,11 +20,12 @@ public:
 	//methods
 	void fetchVariables(ifstream &file, Variables &var);
 	void fetchOperations(ifstream &file, Operations &op);
+	void printVariables();
 	//void fetchStatements(ifstream &file, Statements &state);
 	void setWidthAndSign(Variables &var, string token);
 	bool checkOperationLine(string line);
 	bool checkStatementLine(string line);
-    void checkDuplicatedVariables();
+	void checkDuplicatedVariables();
 	bool checksIfVariableInstantiated(string line);
 	int handleOperations(ifstream &file, Graph* graph);
 };

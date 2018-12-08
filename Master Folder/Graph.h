@@ -11,6 +11,7 @@ class Nodes;
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -18,7 +19,7 @@ class Graph {
 
 private:
 	vector<Nodes> nodes;
-	//vector<Edges> edges;
+	vector<Edges> edges;						// Change from Alex's Read file.
 	int weight;
 	vector<int> alapSchedule;
 
@@ -35,12 +36,15 @@ public:
 
 	//setters
 	void setNodes(Nodes newNodes);
+	void setEdges(Edges newEdges);				// Change from Alex's Read file.
 	void setWeight(int newWeight);
 	void setAlapSchedule(int num);
 	void setListRSchedule(Nodes node);
 
 	//getters
 	vector<Nodes> getNodes();
+	vector<Edges> getEdges();					// Change from Alex's Read file. 
+	unsigned int getNumNodes();					// Change from Alex's Read file.
 	int getWeight();
 	vector<int> getAlapSchedule();
 	vector<Nodes> getListRSchedule();
@@ -56,7 +60,7 @@ public:
 	void createUnscheduledList();
 	void createALAPSchedule(int latency);
 	void checkALAP(int latency);
-	void addNode(Nodes newNode);
+	void addNode(Nodes newNode, int ifStatementLevel, vector<string> conditionVariables);				// Change from Alex's Read file.
 	void Schedule();
 };
 
