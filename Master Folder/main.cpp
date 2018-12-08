@@ -110,6 +110,7 @@ int main(int argc, char* argv[]) {
 	// End of Test graph writting.
 
 	cout << "Start ALAP" << endl;
+	graph.createUnscheduledList();
 	graph.createALAPSchedule(7);
 	cout << "End ALAP" << endl;
 	// ----------------------------------------------------

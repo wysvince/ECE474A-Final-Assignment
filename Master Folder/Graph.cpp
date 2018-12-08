@@ -133,7 +133,7 @@ bool Graph::checkConstraint(Nodes node) {
 }
 
 void Graph::createUnscheduledList(){
-	for (vector<Nodes>::size_type i = nodes.size(); i != 0; i++) {
+	for (vector<Nodes>::size_type i = 0; i < nodes.size(); i++) {
 		nodes.at(i).setALAP(-1); // Set default ALAP 
 	}
 }
