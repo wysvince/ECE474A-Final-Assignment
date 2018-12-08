@@ -83,6 +83,17 @@ int main(int argc, char* argv[]) {
 		for (Edges edge : graph.getEdges()) {
 			edge.printEdge();
 		}
+		cout << "****************************************" << endl;
+
+		//ALAP
+		graph.createUnscheduledList();
+		cout << endl << "After ALAP scheduling" << endl;
+		graph.createALAPSchedule((int)argv[1]);
+		for (Nodes node : graph.getNodes()) {
+			node.printNode();	//PRINT NODES
+		}
+		cout << "****************************************" << endl;
+		cout << endl;	//END ALAP
 
 		// close input file
 		inputFilename.close();

@@ -201,6 +201,7 @@ void Nodes::printNode() {
 	cout << "Node: " << nodeNum << endl;
 	cout << "Operation: " << operation << endl;
 	cout << "ASAP: " << asapTime << endl;
+	cout << "ALAP: " << alapTime << endl;
 	cout << "\tEdges\t" << endl;
 	cout << "\t------------------------\t" << endl;
 	if (edges.size() > 0) {
