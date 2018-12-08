@@ -167,9 +167,22 @@ void WriteOutputFile::writeOperations(ofstream &file, ReadInputFile &read) {
 	file << "\n\n";
 }
 
-void WriteOutputFile::createHLSMHeader(ofstream & file)
+void WriteOutputFile::createHLSMHeader(ofstream & file, ReadInputFile &read)
 {
-	file << "module HLSM (Clk, Rst, Start, Done);" << endl << endl;
+	file << "module HLSM (Clk, Rst, Start, ";
+	
+	// Write inputs.
+	for (vector<Variables>::size_type i = 0; i < read.inputList.size(); i++) {
+		file << read.inputList.at(i).getName() << ", ";
+	}
+
+	// Write Outputs.
+	for (vector<Variables>::size_type o = 0; o < read.outputList.size(); o++) {
+		file << read.outputList.at(o).getName() << ", ";
+	}
+
+	file << "Done);" << endl << endl;
+
 	file << "\tinput Clk, Rst, Start;" << endl;
 	file << "\toutput reg Done;" << endl << endl;
 }

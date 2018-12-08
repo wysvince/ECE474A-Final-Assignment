@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {
 	if (outputFilename.is_open()) {
 
 		// DEBUG ONLY ----------------------------------
-		write.createHLSMHeader(outputFilename);
+		write.createHLSMHeader(outputFilename, read);
 		write.writeDatatypeInstantiation(outputFilename, read);
 		write.writeGraph(outputFilename, graph);
 		// DEBUG ONLY ----------------------------------

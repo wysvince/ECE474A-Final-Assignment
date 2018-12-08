@@ -23,7 +23,7 @@ public:
 	string retrieveDatawidth(int width, string datatype);
 	void writeDatatypeInstantiation(ofstream &file, ReadInputFile &read);
 	void writeOperations(ofstream &file, ReadInputFile &read);
-	void createHLSMHeader(ofstream & file);
+	void createHLSMHeader(ofstream & file, ReadInputFile &read);
 	void writeGraph(ofstream & file, Graph graph);
 	void writeStates(ofstream & file, vector <Nodes> nodes, int numTimes);
 	
