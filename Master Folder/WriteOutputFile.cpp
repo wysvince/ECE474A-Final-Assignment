@@ -26,10 +26,10 @@ string WriteOutputFile::retrieveDatawidth(int width, string datatype) {
 	}
 	else if (datatype.compare("output") == 0) {
 		if (width == 1) {
-			str = "\toutput ";
+			str = "\toutput reg ";
 		}
 		else {
-			str += "\toutput [" + to_string(width) + ":0] ";
+			str += "\toutput reg [" + to_string(width) + ":0] ";
 		}
 	}
 	else if (datatype.compare("register") == 0) {
@@ -236,7 +236,7 @@ void WriteOutputFile::writeGraph(ofstream & file, Graph graph) {
 
 	// Define Final State:
 	file << "\t\t\t\tFinal : begin" << endl;											// Begin Final State.
-	file << "\t\t\t\t\tDone <= 1'b1;" << endl << "\t\t\t\t\tState <= Wait;" << endl;	// Contents of Final State. (Set Done <= 1 and go to wait)
+	file << "\t\t\t\t\tDone <= 1'b1;" << endl << "\t\t\t\t\tstate <= Wait;" << endl;	// Contents of Final State. (Set Done <= 1 and go to wait)
 	file << "\t\t\t\tend\n" << endl;													// End Final State.
 
 	// Default State:
