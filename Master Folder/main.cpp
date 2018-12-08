@@ -88,12 +88,17 @@ int main(int argc, char* argv[]) {
 		//ALAP
 		graph.createUnscheduledList();
 		cout << endl << "After ALAP scheduling" << endl;
-		graph.createALAPSchedule((int)argv[1]);
+		int latency = std::stoi(argv[2]);
+		graph.createALAPSchedule(latency);
 		for (Nodes node : graph.getNodes()) {
 			node.printNode();	//PRINT NODES
 		}
 		cout << "****************************************" << endl;
 		cout << endl;	//END ALAP
+
+		cout << "Creating ListR Start:" << endl;
+		graph.createListRSchedule(latency);
+		cout << "Ending ListR" << endl;
 
 		// close input file
 		inputFilename.close();
@@ -259,7 +264,7 @@ int main(int argc, char* argv[]) {
 	// Done: Generate graph
 	// Generate ALAP Schedule
 	// Generate List_R Schedule
-	//graph.createListRSchedule(latency);	*/
+	//graph.createListRSchedule(latency);	
 	cout << "Creating ALAP Start:" << endl;
 	int latency = std::stoi(argv[2]);
 	graph.createUnscheduledList();
@@ -268,7 +273,7 @@ int main(int argc, char* argv[]) {
 
 	cout << "Creating ListR Start:" << endl;
 	graph.createListRSchedule(latency);
-	cout << "Ending ListR" << endl;
+	cout << "Ending ListR" << endl;*/
 
 //////////// Generate states //////////////////////////////////////////////////////////////////////////////////////////
 
